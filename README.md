@@ -32,14 +32,24 @@ Usage
 
 
 
-The `KronaR` function takes an xml file
+The `KronaR` function takes a data frame of 6 colums with the following header :
+* freq
+* king.n
+* class.n
+* fam.n
+* gen.n
+* spec.n
+
+where freq must be numeric (absolute frequence)
+
+
+
 ```r
 library(KronaR)
 importT <-system.file("src/text.txt",package = "KronaR")
 dat <-read.csv(importT,header = T, sep = "\t")
 
 KronaR(dat)
-
 
 
 ```
