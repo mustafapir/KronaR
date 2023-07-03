@@ -8,8 +8,11 @@
 KronaR <- function(data, width = NULL, height = NULL, elementId = NULL) {
 
   importT <-system.file("src/ImportText.pl", package = "KronaR")
-  cmd<-paste("cat ",data,"| ",importT)
+  datastring <- paste0(capture.output(write.table(dat, sep = "\t", quote = F , row.names = F, col.names = F)),collapse = "\n")
+
+  cmd <- paste0("echo '", datastring,"' | ",importT)
   dataxml <- system(cmd, intern = TRUE)
+  print(dataxml)
 
   x = list(
     
