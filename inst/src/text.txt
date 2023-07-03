@@ -1,8 +1,12 @@
-2	Fats	Saturated fat
-3	Fats	Unsaturated fat	Monounsaturated fat
-3	Fats	Unsaturated fat	Polyunsaturated fat
-13	Carbohydrates	Sugars
-4	Carbohydrates	Dietary fiber
-21	Carbohydrates
-5	Protein
-4
+freq	king.n	class.n	fam.n	gen.n	spec.n
+480.300225168877	Bacteria	Bacilli	Lactobacillaceae	Limosilactobacillus	Limosilactobacillus fermentum
+1254.01997115451	Bacteria	Gammaproteobacteria	Enterobacteriaceae	Escherichia	Escherichia coli
+36.7868839868417	Bacteria	Gammaproteobacteria	Enterobacteriaceae	Shigella	Shigella dysenteriae
+971.607330497873	Bacteria	Bacilli	Listeriaceae	Listeria	Listeria monocytogenes
+735.459719789842	Bacteria	Bacilli	Enterococcaceae	Enterococcus	Enterococcus faecalis
+1497.93632725098	Bacteria	Bacilli	Staphylococcaceae	Staphylococcus	Staphylococcus aureus
+1250.78183637728	Bacteria	Gammaproteobacteria	Enterobacteriaceae	Salmonella	Salmonella enterica
+1644.0276457343	Bacteria	Bacilli	Bacillaceae	Bacillus	Bacillus subtilis
+17.0132746223222	Bacteria	Bacilli	Staphylococcaceae	Staphylococcus	Staphylococcus capitis
+17.0079913215906	Bacteria	Bacilli	Staphylococcaceae	Staphylococcus	Staphylococcus epidermidis
+94.0587940955717	Bacteria	Gammaproteobacteria	Pseudomonadaceae	Pseudomonas	Pseudomonas aeruginosa
