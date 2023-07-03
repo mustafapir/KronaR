@@ -5,14 +5,44 @@
 #' @import htmlwidgets
 #'
 #' @export
-KronaR <- function(data, width = NULL, height = NULL, elementId = NULL) {
+KronaR <- function(t, width = NULL, height = NULL, elementId = NULL) {
+  names(t) <- c('freq', "king.n", "class.n", "fam.n", "gen.n", "spec.n")
+  
+  t$freq <- as.numeric(t$freq)
+  #if any sequences can not be assigned to the highest hieracial level give them a random name like "NA"
+  t[t[,"king.n"]=="","king.n"] <- "NA"
+  #define the hieracy (do not include the counting var here), the first space is the root category
+  t$pathString <- paste(" ",t$king.n,t$class.n,t$fam.n,t$gen.n,t$spec.n,sep = "/")
+  #transform to a data.tree
+  t <- as.Node(t)
+  #define the sequence frequency calculations
+  t$Do(function(x) x$freq <- Aggregate(x, "freq", sum), traversal = "post-order")
+  print(t,"freq")
+  #get all frequencies for each node
+  repval <- t$Get("freq")
+  #tranform into a nested list and afterwards into a xml document to get the nesting
+  t <- t %>% as.list(.,mode="simple",unname=T)
+  t <- as_xml_document(list(root=t))%>%as.character
+  #from here it is just a bunch of regex
+  #split the xml file into one line for each < 
+  temp <- strsplit(t,"\n")[[1]][2] %>% strsplit(.,"(?=<)",perl=T) %>% .[[1]]
+  temp <- paste0(temp[c(T,F)],temp[c(F,T)]) %>% gsub("[0-9]","",.)
+  #remove the names nodes and replace by krona annotation
+  #replace the closing named tags by generic closing "node" tags
+  temp <- gsub("</(.*)?>","</node>",temp) %>% gsub(">.*$",">",.) 
+  #replace the named opening tags by generic "node" tags with the "name" attribute, replace all (because they are incomplete) numeric values with a placeholder
+  temp <- gsub("<(?=[^/])(.*)?>",
+      '<node name="\\1"><magnitude><val>__\\1</val><val>1</val></magnitude>',temp,perl=T)
+  temp %<>% gsub("root"," ",.)
+  #find the placeholders to insert the frequencies and execute
+  repos <- grep("__",temp)
+  for (i in repos)
+    temp[i] <- gsub("^(.*)(__.*?)(?=<)(.*)",paste0("\\1",repval[which(repos==i)],"\\3"),temp[i],perl=T)
 
-  importT <-system.file("src/ImportText.pl", package = "KronaR")
-  datastring <- paste0(capture.output(write.table(dat, sep = "\t", quote = F , row.names = F, col.names = F)),collapse = "\n")
 
-  cmd <- paste0("echo '", datastring,"' | ",importT)
-  dataxml <- system(cmd, intern = TRUE)
-  print(dataxml)
+
+
+  dataxml <- paste(temp, collapse = "")
 
   x = list(
     
