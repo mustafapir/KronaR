@@ -11,24 +11,28 @@ KronaR - v0.9
 * Saved as standalone web pages for ad-hoc sharing via email, Dropbox, etc.
 
 its an integration of  KronaR <https://github.com/marbl/KronaR/> in R
-Its  an R package with an interface to the KronaR.js javascript library. it uses the [htmlwidgets](https://github.com/ramnathv/htmlwidgets) framework.
+Its an R package with an interface to the KronaR.js javascript library. it uses the [htmlwidgets](https://github.com/ramnathv/htmlwidgets) framework.
+
+Starting from the nice package KronaR, I tweaked it a little bit. It comes with absolutely no guarantees. I am absolutely not related to the original project.
 
 Installation
 =================
 You can install the KronaR package from Github as follows:
 
 ```r
-devtools::install_git("https://github.com/pierreLec/KronaR")
+devtools::install_git("https://github.com/sybrohee/KronaR")
 ```
 
 Usage
 =================
 
+
+
 The `KronaR` function takes an xml file
 ```r
 library(KronaR)
 importT <-system.file("src/text.txt",package = "KronaR")
-dat <-read.csv(importT,header = FALSE, sep = "\t")
+dat <-read.csv(importT,header = T, sep = "\t")
 
 KronaR(dat)
 
@@ -43,7 +47,7 @@ You can also use the **KronaR** function within [R Markdown](http://rmarkdown.rs
 library(KronaR)
 library(shiny)
 importT <-system.file("src/text.txt",package = "KronaR")
-dat <-read.csv(importT,header = FALSE, sep = "\t")
+dat <-read.csv(importT,header = T, sep = "\t")
 server = function(input, output) {
   output$KronaR <- renderKronaR({
     KronaR(dat)
