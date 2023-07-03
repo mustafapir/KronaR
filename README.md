@@ -1,7 +1,12 @@
 
 
-KronaR - v0.9
-=================
+My KronaR 
+==========
+
+Starting from the nice package KronaR, I tweaked it a little bit. It comes with absolutely no guarantees. I am absolutely not related to the original project (from Pierre Lechat).
+
+I also picked a few ideas I "stole" from https://bioinformatics.stackexchange.com/questions/4326/transform-a-r-data-frame-into-a-krona-plot-without-krona-tools
+
 
 `KronaR` is an HtmlWidget <http://www.htmlwidgets.org/> that can be 
 
@@ -13,7 +18,6 @@ KronaR - v0.9
 its an integration of  KronaR <https://github.com/marbl/KronaR/> in R
 Its an R package with an interface to the KronaR.js javascript library. it uses the [htmlwidgets](https://github.com/ramnathv/htmlwidgets) framework.
 
-Starting from the nice package KronaR, I tweaked it a little bit. It comes with absolutely no guarantees. I am absolutely not related to the original project.
 
 Installation
 =================
