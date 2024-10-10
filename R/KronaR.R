@@ -6,13 +6,13 @@
 #'
 #' @export
 KronaR <- function(t, width = NULL, height = NULL, elementId = NULL) {
-  names(t) <- c('freq', "king.n", "class.n", "fam.n", "gen.n", "spec.n")
-  
+  names(t)[1] <- c('freq')
+
   t$freq <- as.numeric(t$freq)
   #if any sequences can not be assigned to the highest hieracial level give them a random name like "NA"
-  t[t[,"king.n"]=="","king.n"] <- "NA"
+  t[t[,2]=="",2] <- "NA"
   #define the hieracy (do not include the counting var here), the first space is the root category
-  t$pathString <- paste(" ",t$king.n,t$class.n,t$fam.n,t$gen.n,t$spec.n,sep = "/")
+  t$pathString <- apply(t[, -1], 1, function(row) paste(row, collapse = "/"))
   #transform to a data.tree
   t <- as.Node(t)
   #define the sequence frequency calculations
@@ -24,12 +24,12 @@ KronaR <- function(t, width = NULL, height = NULL, elementId = NULL) {
   t <- t %>% as.list(.,mode="simple",unname=T)
   t <- as_xml_document(list(root=t))%>%as.character
   #from here it is just a bunch of regex
-  #split the xml file into one line for each < 
+  #split the xml file into one line for each <
   temp <- strsplit(t,"\n")[[1]][2] %>% strsplit(.,"(?=<)",perl=T) %>% .[[1]]
   temp <- paste0(temp[c(T,F)],temp[c(F,T)]) %>% gsub("[0-9]","",.)
   #remove the names nodes and replace by krona annotation
   #replace the closing named tags by generic closing "node" tags
-  temp <- gsub("</(.*)?>","</node>",temp) %>% gsub(">.*$",">",.) 
+  temp <- gsub("</(.*)?>","</node>",temp) %>% gsub(">.*$",">",.)
   #replace the named opening tags by generic "node" tags with the "name" attribute, replace all (because they are incomplete) numeric values with a placeholder
   temp <- gsub("<(?=[^/])(.*)?>",
       '<node name="\\1"><magnitude><val>__\\1</val><val>1</val></magnitude>',temp,perl=T)
@@ -45,7 +45,7 @@ KronaR <- function(t, width = NULL, height = NULL, elementId = NULL) {
   dataxml <- paste(temp, collapse = "")
 
   x = list(
-    
+
     data =dataxml
   )
 
