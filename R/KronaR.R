@@ -14,7 +14,7 @@ KronaR <- function(t, width = NULL, height = NULL, elementId = NULL) {
   #define the hieracy (do not include the counting var here), the first space is the root category
   t$pathString <- apply(t[, -1], 1, function(row) paste(row, collapse = "/"))
   #transform to a data.tree
-  t <- as.Node(t)
+  t <- data.tree::as.Node(t)
   #define the sequence frequency calculations
   t$Do(function(x) x$freq <- Aggregate(x, "freq", sum), traversal = "post-order")
   print(t,"freq")
@@ -22,7 +22,7 @@ KronaR <- function(t, width = NULL, height = NULL, elementId = NULL) {
   repval <- t$Get("freq")
   #tranform into a nested list and afterwards into a xml document to get the nesting
   t <- t %>% as.list(.,mode="simple",unname=T)
-  t <- as_xml_document(list(root=t))%>%as.character
+  t <- xml2::as_xml_document(list(root=t))%>%as.character
   #from here it is just a bunch of regex
   #split the xml file into one line for each <
   temp <- strsplit(t,"\n")[[1]][2] %>% strsplit(.,"(?=<)",perl=T) %>% .[[1]]
