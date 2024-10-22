@@ -13,10 +13,10 @@ HTMLWidgets.widget({
       renderValue: function(x) {
 
         // TODO: code to render the widget, e.g.
-        // initialise the page 
+        // initialise the page
         while (el.firstChild) {
             el.removeChild(el.firstChild);
-        }   
+        }
         //console.log(x);
         console.log(x.data);
         //el.innerText = x.message;
@@ -29,18 +29,18 @@ HTMLWidgets.widget({
 
         //body.innerHTML ="<body style='padding:0;position:relative'>\
 
-       
+
         var img = document.createElement("img");
           img.setAttribute( "id","hiddenImage");
           img.setAttribute( "visibility","hide");
-          document.body.appendChild(img);       
+          document.body.appendChild(img);
 
          var divdetails = document.createElement("details");
           divdetails.setAttribute( "style","position:absolute;top:1%;right:2%;text-align:right;");
-          document.body.appendChild(divdetails);      
+          document.body.appendChild(divdetails);
           var divoptions = document.createElement("options");
           divoptions.setAttribute( "style","position:absolute;left:0;top:0");
-          document.body.appendChild(divoptions);      
+          document.body.appendChild(divoptions);
     //<script name='tree' src='http://krona.sourceforge.net/krona-1.1.js'></script>"
             //document.get
         //canvas.setAttribute( "style","width:"+width+";height:"+height);
@@ -69,7 +69,7 @@ HTMLWidgets.widget({
 
           /*for (var i = 0; i < conditions.length; i++) {
                 data +="<dataset>"+conditions[i]+"</dataset>";
-                
+
           }*/
                  /* <dataset>M3_skin_day_0</dataset>\
                   <dataset>M3_skin_day_1</dataset>\
@@ -94,18 +94,18 @@ HTMLWidgets.widget({
             data += dataKrona;
 
           console.log(data);
-          var datel = document.createElement("Krona");    
+          var datel = document.createElement("Krona");
           datel.setAttribute( "collapse","true");
           datel.setAttribute( "key","true");
           datel.innerHTML= data;
           //document.body.appendChild(datel);
           //load();
-          // var scriptKrona = document.createElement("script"); 
+          // var scriptKrona = document.createElement("script");
           // scriptKrona.name = "tree";
           // scriptKrona.src = "http://krona.sourceforge.net/krona-1.1.js";
           var div = document.createElement("div");
           div.setAttribute( "style","display:none");
-          
+
           div.appendChild(datel);
           document.body.appendChild(div);
 
@@ -123,7 +123,30 @@ HTMLWidgets.widget({
       resize: function(width, height) {
 
         // TODO: code to re-render the widget with a new size
+        // Remove all existing children (if any) to reset the widget content
+        while (el.firstChild) {
+            el.removeChild(el.firstChild);
+        }
 
+        // Create a new container or adjust the existing elements' size based on the new width and height
+        var newDiv = document.createElement("div");
+        newDiv.setAttribute("style", "width:" + width + "px; height:" + height + "px; position: relative;");
+
+        // Add back any necessary elements or widgets with the adjusted size
+        // In this case, we assume the core element is a Krona element, adjust if needed
+        var datel = document.createElement("Krona");
+        datel.setAttribute("collapse", "true");
+        datel.setAttribute("key", "true");
+
+        // Re-add content, perhaps from previously stored data
+        datel.innerHTML = x.data + dataKrona;
+
+        // Append the resized widget to the container
+        newDiv.appendChild(datel);
+        el.appendChild(newDiv);
+
+        // Optionally re-trigger any necessary re-initialization or redraw logic
+        load();
       }
 
     };
