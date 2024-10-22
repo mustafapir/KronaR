@@ -1,7 +1,7 @@
 {//-----------------------------------------------------------------------------
-// 
+//
 // PURPOSE
-// 
+//
 // KronaR is a flexible tool for exploring the relative proportions of
 // hierarchical data, such as metagenomic classifications, using a
 // radial, space-filling display. It is implemented using HTML5 and
@@ -9,36 +9,36 @@
 // Internet, requiring only a current version of any major web
 // browser. KronaR charts can be created using an Excel template or from
 // common bioinformatic formats using the provided conversion scripts.
-// 
-// 
+//
+//
 // COPYRIGHT LICENSE
-// 
+//
 // Copyright (c) 2011, Battelle National Biodefense Institute (BNBI);
 // all rights reserved. Authored by: Brian Ondov, Nicholas Bergman, and
 // Adam Phillippy
-// 
+//
 // This Software was prepared for the Department of Homeland Security
 // (DHS) by the Battelle National Biodefense Institute, LLC (BNBI) as
 // part of contract HSHQDC-07-C-00020 to manage and operate the National
 // Biodefense Analysis and Countermeasures Center (NBACC), a Federally
 // Funded Research and Development Center.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
 // met:
-// 
+//
 // * Redistributions of source code must retain the above copyright
 //   notice, this list of conditions and the following disclaimer.
-// 
+//
 // * Redistributions in binary form must reproduce the above copyright
 //   notice, this list of conditions and the following disclaimer in the
 //   documentation and/or other materials provided with the distribution.
-// 
+//
 // * Neither the name of the Battelle National Biodefense Institute nor
 //   the names of its contributors may be used to endorse or promote
 //   products derived from this software without specific prior written
 //   permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -50,27 +50,27 @@
 // THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-// 
+//
+//
 // TRADEMARK LICENSE
-// 
+//
 // KRONA(TM) is a trademark of the Department of Homeland Security, and use
 // of the trademark is subject to the following conditions:
-// 
+//
 // * Distribution of the unchanged, official code/software using the
 //   KRONA(TM) mark is hereby permitted by the Department of Homeland
 //   Security, provided that the software is distributed without charge
 //   and modification.
-// 
+//
 // * Distribution of altered source code/software using the KRONA(TM) mark
 //   is not permitted unless written permission has been granted by the
 //   Department of Homeland Security.
-// 
-// 
+//
+//
 // FOR MORE INFORMATION VISIT
-// 
+//
 // https://github.com/marbl/Krona/wiki/
-// 
+//
 //-----------------------------------------------------------------------------
 }
 
@@ -302,15 +302,16 @@ function backingScale()
 			return window.devicePixelRatio;
 		}
 	}
-	
+
 	return 1;
 }
 
 function resize()
 {
-	imageWidth = window.innerWidth;
-	imageHeight = window.innerHeight;
-	
+    var container = document.getElementById('myContainer');
+    imageWidth = container.clientWidth;
+    imageHeight = container.clientHeight;
+
 	if ( ! snapshotMode )
 	{
 		context.canvas.width = imageWidth * backingScale();
@@ -319,28 +320,28 @@ function resize()
 		context.canvas.style.height = imageHeight + "px"
 		context.scale(backingScale(), backingScale());
 	}
-	
+
 	if ( datasetDropDown )
 	{
-		var ratio = 
+		var ratio =
 			(datasetDropDown.offsetTop + datasetDropDown.clientHeight) * 2 /
 			imageHeight;
-		
+
 		if ( ratio > 1 )
 		{
 			ratio = 1;
 		}
-		
+
 		ratio = Math.sqrt(ratio);
-		
-		datasetSelectWidth = 
+
+		datasetSelectWidth =
 			(datasetDropDown.offsetLeft + datasetDropDown.clientWidth) * ratio;
 	}
 	var leftMargin = datasets > 1 ? datasetSelectWidth + 30 : 0;
 	var minDimension = imageWidth - mapWidth - leftMargin > imageHeight ?
 		imageHeight :
 		imageWidth - mapWidth - leftMargin;
-	
+
 	maxMapRadius = minDimension * .03;
 	buffer = minDimension * bufferFactor;
 	margin = minDimension * .015;
@@ -364,7 +365,7 @@ function Tween(start, end)
 	this.start = start;
 	this.end = end;
 	this.current = this.start;
-	
+
 	this.current = function()
 	{
 		if ( progress == 1 || this.start == this.end )
@@ -376,7 +377,7 @@ function Tween(start, end)
 			return this.start + tweenFactor * (this.end - this.start);
 		}
 	};
-	
+
 	this.setTarget = function(target)
 	{
 		this.start = this.current();
@@ -389,7 +390,7 @@ function Node()
 	this.id = currentNodeID;
 	currentNodeID++;
 	nodes[this.id] = this;
-	
+
 	this.angleStart = new Tween(Math.PI, 0);
 	this.angleEnd = new Tween(Math.PI, 0);
 	this.radiusInner = new Tween(1, 1);
@@ -397,11 +398,11 @@ function Node()
 	this.labelWidth = new Tween(0, 0);
 	this.scale = new Tween(1, 1); // TEMP
 	this.radiusOuter = new Tween(1, 1);
-	
+
 	this.r = new Tween(255, 255);
 	this.g = new Tween(255, 255);
 	this.b = new Tween(255, 255);
-	
+
 	this.alphaLabel = new Tween(0, 1);
 	this.alphaLine = new Tween(0, 1);
 	this.alphaArc = new Tween(0, 0);
@@ -410,44 +411,44 @@ function Node()
 	this.alphaPattern = new Tween(0, 0);
 	this.children = Array();
 	this.parent = 0;
-	
+
 	this.attributes = new Array(attributes.length);
-	
+
 	this.addChild = function(child)
 	{
 		this.children.push(child);
 	};
-	
+
 	this.addLabelNode = function(depth, labelOffset)
 	{
 		if ( labelHeadNodes[depth][labelOffset] == 0 )
 		{
 			// this will become the head node for this list
-			
+
 			labelHeadNodes[depth][labelOffset] = this;
 			this.labelPrev = this;
 		}
-		
+
 		var head = labelHeadNodes[depth][labelOffset];
-		
+
 		this.labelNext = head;
 		this.labelPrev = head.labelPrev;
 		head.labelPrev.labelNext = this;
 		head.labelPrev = this;
 	}
-	
+
 	this.canDisplayDepth = function()
 	{
 		// whether this node is at a depth that can be displayed, according
 		// to the max absolute depth
-		
+
 		return this.depth <= maxAbsoluteDepth;
 	}
-	
+
 	this.canDisplayHistory = function()
 	{
 		var radiusInner;
-		
+
 		if ( compress )
 		{
 			radiusInner = compressedRadii[0];
@@ -456,14 +457,14 @@ function Node()
 		{
 			radiusInner = nodeRadius;
 		}
-		
+
 		return (
 			-this.labelRadius.end * gRadius +
 			historySpacingFactor * fontSize / 2 <
 			radiusInner * gRadius
 			);
 	}
-	
+
 	this.canDisplayLabelCurrent = function()
 	{
 		return (
@@ -471,47 +472,47 @@ function Node()
 			(this.radiusInner.current() * gRadius + gRadius) >=
 			minWidth());
 	}
-	
+
 	this.checkHighlight = function()
 	{
 		if ( this.children.length == 0 && this == focusNode )
 		{
 			//return false;
 		}
-		
+
 		if ( this.hide )
 		{
 			return false;
 		}
-		
+
 		if ( this.radiusInner.end == 1 )
 		{
 			// compressed to the outside; don't check
-			
+
 			return false;
 		}
-		
+
 		var highlighted = false;
-		
+
 		var angleStartCurrent = this.angleStart.current() + rotationOffset;
 		var angleEndCurrent = this.angleEnd.current() + rotationOffset;
 		var radiusInner = this.radiusInner.current() * gRadius;
-		
+
 		for ( var i = 0; i < this.children.length; i++ )
 		{
 			highlighted = this.children[i].checkHighlight();
-			
+
 			if ( highlighted )
 			{
 				return true;
 			}
 		}
-		
+
 		if ( this.radial )
 		{
 			var angleText = (angleStartCurrent + angleEndCurrent) / 2;
 			var radiusText = (gRadius + radiusInner) / 2;
-			
+
 			context.rotate(angleText);
 			context.beginPath();
 			context.moveTo(radiusText, -fontSize);
@@ -520,16 +521,16 @@ function Node()
 			context.lineTo(radiusText + centerX, -fontSize);
 			context.closePath();
 			context.rotate(-angleText);
-			
+
 			if ( context.isPointInPath(mouseXRel, mouseYRel) )
 			{
 				var label = String(this.getPercentage()) + '%' + '   ' + this.name;
-				
+
 				if ( this.searchResultChildren() )
 			    {
 					label += searchResultString(this.searchResultChildren());
 				}
-				
+
 				if
 				(
 					Math.sqrt((mouseXRel) * (mouseXRel) + (mouseYRel) * (mouseYRel)) / backingScale() <
@@ -545,7 +546,7 @@ function Node()
 		    for ( var i = 0; i < this.hiddenLabels.length; i++ )
 		    {
 		        var hiddenLabel = this.hiddenLabels[i];
-		        
+
 				context.rotate(hiddenLabel.angle);
 				context.beginPath();
 				context.moveTo(gRadius, -fontSize);
@@ -554,16 +555,16 @@ function Node()
 				context.lineTo(gRadius + centerX, -fontSize);
 				context.closePath();
 				context.rotate(-hiddenLabel.angle);
-				
+
 				if ( context.isPointInPath(mouseXRel, mouseYRel) )
 				{
 					var label = String(hiddenLabel.value) + ' more';
-					
+
 					if ( hiddenLabel.search )
 				    {
 						label += searchResultString(hiddenLabel.search);
 					}
-					
+
 					if
 					(
 						Math.sqrt((mouseXRel) * (mouseXRel) + (mouseYRel) * (mouseYRel)) / backingScale() <
@@ -576,19 +577,19 @@ function Node()
 				}
 			}
 		}
-		
+
 		if ( ! highlighted && this != selectedNode && ! this.getCollapse() )
 		{
 			context.beginPath();
 			context.arc(0, 0, radiusInner, angleStartCurrent, angleEndCurrent, false);
 			context.arc(0, 0, gRadius, angleEndCurrent, angleStartCurrent, true);
 			context.closePath();
-			
+
 			if ( context.isPointInPath(mouseXRel, mouseYRel) )
 			{
 				highlighted = true;
 			}
-			
+
 			if
 			(
 				! highlighted &&
@@ -604,40 +605,40 @@ function Node()
 				}
 			}
 		}
-		
+
 		if ( highlighted )
 		{
 			if ( this != highlightedNode )
 			{
 			//	document.body.style.cursor='pointer';
 			}
-			
+
 			highlightedNode = this;
 		}
-		
+
 		return highlighted;
 	}
-	
+
 	this.checkHighlightCenter = function()
 	{
 		if ( ! this.canDisplayHistory() )
 		{
 			return;
 		}
-		
+
 		var cx = centerX;
 		var cy = centerY - this.labelRadius.end * gRadius;
 		//var dim = context.measureText(this.name);
-		
+
 		var width = this.nameWidth;
-		
+
 		if ( this.searchResultChildren() )
 		{
 			var results = searchResultString(this.searchResultChildren());
 			var dim = context.measureText(results);
 			width += dim.width;
 		}
-		
+
 		if
 		(
 			mouseX > cx - width / 2 &&
@@ -649,45 +650,45 @@ function Node()
 			highlightedNode = this;
 			return;
 		}
-		
+
 		if ( this.getParent() )
 		{
 			this.getParent().checkHighlightCenter();
 		}
 	}
-	
+
 	this.checkHighlightKey = function()
 	{
 		var offset = keyOffset();
-		
+
 		var xMin = imageWidth - keySize - margin - this.keyNameWidth - keyBuffer;
 		var xMax = imageWidth - margin;
 		var yMin = offset;
 		var yMax = offset + keySize;
-		
+
 		currentKey++;
-		
+
 		return (
 			mouseX > xMin &&
 			mouseX < xMax &&
 			mouseY > yMin &&
 			mouseY < yMax);
 	}
-	
+
 	this.checkHighlightMap = function()
 	{
 		if ( this.parent )
 		{
 			this.parent.checkHighlightMap();
 		}
-		
+
 		if ( this.getCollapse() || this == focusNode )
 		{
 			return;
 		}
-		
+
 		var box = this.getMapPosition();
-		
+
 		if
 		(
 			mouseX > box.x - mapRadius &&
@@ -699,14 +700,14 @@ function Node()
 			highlightedNode = this;
 		}
 	}
-	
+
 /*	this.collapse = function()
 	{
 		for (var i = 0; i < this.children.length; i++ )
 		{
 			this.children[i] = this.children[i].collapse();
 		}
-		
+
 		if
 		(
 			this.children.length == 1 &&
@@ -722,23 +723,23 @@ function Node()
 			return this;
 		}
 	}
-*/	
+*/
 	this.draw = function(labelMode, selected, searchHighlighted)
 	{
 		var depth = this.getDepth() - selectedNode.getDepth() + 1;
 //		var hidden = false;
-		
+
 		if ( selectedNode == this )
 		{
 			selected = true;
 		}
-		
+
 		var angleStartCurrent = this.angleStart.current() + rotationOffset;
 		var angleEndCurrent = this.angleEnd.current() + rotationOffset;
 		var radiusInner = this.radiusInner.current() * gRadius;
 		var canDisplayLabelCurrent = this.canDisplayLabelCurrent();
 		var hiddenSearchResults = false;
-		
+
 /*		if ( ! this.hide )
 		{
 			for ( var i = 0; i < this.children.length; i++ )
@@ -749,22 +750,22 @@ function Node()
 				}
 			}
 		}
-*/		
+*/
 		var drawChildren =
 			( ! this.hide || ! this.hidePrev && progress < 1 ) &&
 			( ! this.hideAlone || ! this.hideAlonePrev && progress < 1 );
-		
+
 //		if ( this.alphaWedge.current() > 0 || this.alphaLabel.current() > 0 )
 		{
 			var lastChildAngleEnd;
-			
+
 			if ( this.hasChildren() )//canDisplayChildren )
 			{
 				lastChildAngleEnd =
 					this.children[this.children.length - 1].angleEnd.current()
 					+ rotationOffset;
 			}
-			
+
 			if ( labelMode )
 			{
 				var drawRadial =
@@ -773,26 +774,26 @@ function Node()
 					this.parent != selectedNode &&
 					angleEndCurrent == this.parent.angleEnd.current() + rotationOffset
 				);
-				
+
 				if ( angleStartCurrent != angleEndCurrent )
 				{
 					this.drawLines(angleStartCurrent, angleEndCurrent, radiusInner, drawRadial, selected);
 				}
-				
+
 				var alphaOtherCurrent = this.alphaOther.current();
 				var childRadiusInner;
-				
+
 				if ( this == selectedNode || alphaOtherCurrent )
 				{
 					childRadiusInner =
 						this.children[this.children.length - 1].radiusInner.current() * gRadius;
 				}
-				
+
 				if ( this == selectedNode )
 				{
 					this.drawReferenceRings(childRadiusInner);
 				}
-				
+
 				if
 				(
 					selected &&
@@ -808,7 +809,7 @@ function Node()
 				)
 				{
 					context.globalAlpha = this.alphaWedge.current();
-					
+
 					drawWedge
 					(
 						angleStartCurrent,
@@ -819,7 +820,7 @@ function Node()
 						0,
 						true
 					);
-					
+
 					if
 					(
 						this.keyed &&
@@ -833,11 +834,11 @@ function Node()
 						var angle = (angleEndCurrent + angleStartCurrent) / 2;
 						this.drawLabel(angle, true, false, true, true);
 					}
-					
+
 					//this.drawHighlight(false);
 					searchHighlighted = true;
 				}
-				
+
 				if
 				(
 					this == selectedNode ||
@@ -855,7 +856,7 @@ function Node()
 					{
 						context.globalAlpha = this.alphaLabel.current();
 					}
-					
+
 					this.drawLabel
 					(
 						(angleStartCurrent + angleEndCurrent) / 2,
@@ -865,11 +866,11 @@ function Node()
 						selected,
 						this.radial
 					);
-					
+
 					if ( this.radial != this.radialPrev && this.alphaLabel.start == 1 && progress < 1 )
 					{
 						context.globalAlpha = 1 - tweenFactor;
-						
+
 						this.drawLabel
 						(
 							(angleStartCurrent + angleEndCurrent) / 2,
@@ -880,7 +881,7 @@ function Node()
 						);
 					}
 				}
-				
+
 				if
 				(
 					alphaOtherCurrent &&
@@ -896,7 +897,7 @@ function Node()
 					{
 						//context.font = fontNormal;
 						context.globalAlpha = this.alphaOther.current();
-						
+
 						drawTextPolar
 						(
 							this.getUnclassifiedText(),
@@ -911,7 +912,7 @@ function Node()
 						);
 					}
 				}
-				
+
 				if ( this == selectedNode && this.keyUnclassified && showKeys )
 				{
 					this.drawKey
@@ -925,15 +926,15 @@ function Node()
 			else
 			{
 				var alphaWedgeCurrent = this.alphaWedge.current();
-				
+
 				if ( alphaWedgeCurrent || this.alphaOther.current() )
 				{
 					var currentR = this.r.current();
 					var currentG = this.g.current();
 					var currentB = this.b.current();
-						
+
 					var fill = rgbText(currentR, currentG, currentB);
-					
+
 					var radiusOuter;
 					var lastChildAngle;
 					var truncateWedge =
@@ -943,7 +944,7 @@ function Node()
 						(compress || depth < maxDisplayDepth) &&
 						drawChildren
 					);
-					
+
 					if ( truncateWedge )
 					{
 						radiusOuter = this.children[0].radiusInner.current() * gRadius;
@@ -960,7 +961,7 @@ function Node()
 					else
 					{ // TEMP
 						radiusOuter = radiusInner + nodeRadius * gRadius;
-						
+
 						if ( radiusOuter > gRadius )
 						{
 							radiusOuter = gRadius;
@@ -968,7 +969,7 @@ function Node()
 					}
 					*/
 					context.globalAlpha = alphaWedgeCurrent;
-					
+
 					if ( radiusInner != radiusOuter )
 					{
 						drawWedge
@@ -981,21 +982,21 @@ function Node()
 							fill,
 							this.alphaPattern.current()
 						);
-						
+
 						if ( truncateWedge )
 						{
 							// fill in the extra space if the sum of our childrens'
 							// magnitudes is less than ours
-							
+
 							if ( lastChildAngleEnd < angleEndCurrent )//&& false) // TEMP
 							{
 								if ( radiusOuter > 1 )
 								{
 									// overlap slightly to hide the seam
-									
+
 	//								radiusOuter -= 1;
 								}
-								
+
 								if ( alphaWedgeCurrent < 1 )
 								{
 									context.globalAlpha = this.alphaOther.current();
@@ -1010,7 +1011,7 @@ function Node()
 									);
 									context.globalAlpha = alphaWedgeCurrent;
 								}
-								
+
 								drawWedge
 								(
 									lastChildAngleEnd,
@@ -1023,7 +1024,7 @@ function Node()
 								);
 							}
 						}
-						
+
 						if ( radiusOuter < gRadius )
 						{
 							// patch up the seam
@@ -1035,7 +1036,7 @@ function Node()
 							context.stroke();
 						}
 					}
-					
+
 					if ( this.keyed && selected && showKeys )//&& progress == 1 )
 					{
 						this.drawKey
@@ -1052,9 +1053,9 @@ function Node()
 				}
 			}
 		}
-		
+
 		this.hiddenLabels = Array();
-		
+
 		if ( drawChildren )
 		{
 			// draw children
@@ -1072,7 +1073,7 @@ function Node()
 			}
 		}
 	};
-	
+
 	this.drawHiddenChildren = function
 	(
 		firstHiddenChild,
@@ -1082,12 +1083,12 @@ function Node()
 	)
 	{
 		var firstChild = this.children[firstHiddenChild];
-		
+
 		if ( firstChild.hiddenEnd == null || firstChild.radiusInner.current() == 1 )
 		{
 			return false;
 		}
-		
+
 		for ( var i = firstHiddenChild; i < firstChild.hiddenEnd; i++ )
 		{
 			if ( ! this.children[i].hide || ! this.children[i].hidePrev && progress < 1 )
@@ -1095,31 +1096,31 @@ function Node()
 				return false;
 			}
 		}
-		
+
 		var angleStart = firstChild.angleStart.current() + rotationOffset;
 		var lastChild = this.children[firstChild.hiddenEnd];
 		var angleEnd = lastChild.angleEnd.current() + rotationOffset;
 		var radiusInner = gRadius * firstChild.radiusInner.current();
 		var hiddenChildren = firstChild.hiddenEnd - firstHiddenChild + 1;
-		
+
 		if ( labelMode )
 		{
 			var hiddenSearchResults = 0;
-			
+
 			for ( var i = firstHiddenChild; i <= firstChild.hiddenEnd; i++ )
 			{
 				hiddenSearchResults += this.children[i].searchResults;
-				
+
 				if ( this.children[i].magnitude == 0 )
 				{
 					hiddenChildren--;
 				}
 			}
-			
+
 			if
 			(
 				selected &&
-				(angleEnd - angleStart) * 
+				(angleEnd - angleStart) *
 				(gRadius + gRadius) >=
 				minWidth() ||
 				this == highlightedNode &&
@@ -1128,7 +1129,7 @@ function Node()
 			)
 			{
 				context.globalAlpha = this.alphaWedge.current();
-				
+
 				this.drawHiddenLabel
 				(
 					angleStart,
@@ -1138,20 +1139,20 @@ function Node()
 				);
 			}
 		}
-		
+
 		var drawWedges = true;
-		
+
 		for ( var i = firstHiddenChild; i <= firstChild.hiddenEnd; i++ )
 		{
 			// all hidden children must be completely hidden to draw together
-			
+
 			if ( this.children[i].alphaPattern.current() != this.children[i].alphaWedge.current() )
 			{
 				drawWedges = false;
 				break;
 			}
 		}
-		
+
 		if ( labelMode )
 		{
 			if ( drawWedges )
@@ -1159,7 +1160,7 @@ function Node()
 				var drawRadial = (angleEnd < this.angleEnd.current() + rotationOffset);
 				this.drawLines(angleStart, angleEnd, radiusInner, drawRadial);
 			}
-			
+
 			if ( hiddenSearchResults && ! searchHighlighted )
 			{
 				drawWedge
@@ -1177,14 +1178,14 @@ function Node()
 		else if ( drawWedges )
 		{
 			context.globalAlpha = this.alphaWedge.current();
-			
+
 			var fill = rgbText
 			(
 				firstChild.r.current(),
 				firstChild.g.current(),
 				firstChild.b.current()
 			);
-			
+
 			drawWedge
 			(
 				angleStart,
@@ -1196,23 +1197,23 @@ function Node()
 				false
 			);
 		}
-		
+
 		return drawWedges;
 	}
-	
+
 	this.drawHiddenLabel = function(angleStart, angleEnd, value, hiddenSearchResults)
 	{
 		var textAngle = (angleStart + angleEnd) / 2;
 		var labelRadius = gRadius + fontSize;//(radiusInner + radius) / 2;
-		
+
 		var hiddenLabel = Array();
-		
+
 		hiddenLabel.value = value;
 		hiddenLabel.angle = textAngle;
 		hiddenLabel.search = hiddenSearchResults;
-		
+
 		this.hiddenLabels.push(hiddenLabel);
-		
+
 		drawTick(gRadius - fontSize * .75, fontSize * 1.5, textAngle);
 		drawTextPolar
 		(
@@ -1227,15 +1228,15 @@ function Node()
 			hiddenSearchResults
 		);
 	}
-	
+
 	this.drawHighlight = function(bold)
 	{
 		var angleStartCurrent = this.angleStart.current() + rotationOffset;
 		var angleEndCurrent = this.angleEnd.current() + rotationOffset;
 		var radiusInner = this.radiusInner.current() * gRadius;
-		
+
 		//this.setHighlightStyle();
-		
+
 		if ( this == focusNode && this == highlightedNode && this.hasChildren() )
 		{
 //			context.fillStyle = "rgba(255, 255, 255, .3)";
@@ -1259,7 +1260,7 @@ function Node()
 				true
 			);
 		}
-		
+
 		// check if hidden children should be highlighted
 		//
 		for ( var i = 0; i < this.children.length; i++ )
@@ -1276,7 +1277,7 @@ function Node()
 				var hiddenAngleStart = firstChild.angleStart.current() + rotationOffset;
 				var hiddenAngleEnd = lastChild.angleEnd.current() + rotationOffset;
 				var hiddenRadiusInner = gRadius * firstChild.radiusInner.current();
-				
+
 				drawWedge
 				(
 					hiddenAngleStart,
@@ -1287,7 +1288,7 @@ function Node()
 					0,
 					true
 				);
-				
+
 				if ( false && ! this.searchResults )
 				{
 					this.drawHiddenLabel
@@ -1297,40 +1298,40 @@ function Node()
 						firstChild.hiddenEnd - i + 1
 					);
 				}
-				
+
 				i = firstChild.hiddenEnd;
 			}
 		}
-		
+
 //			context.strokeStyle = 'black';
 		context.fillStyle = 'black';
-		
+
 		var highlight = ! ( progress < 1 && zoomOut && this == selectedNodeLast );
-		
+
 		var angle = (angleEndCurrent + angleStartCurrent) / 2;
-		
+
 		if ( ! (this.keyed && showKeys) )
 		{
 			this.drawLabel(angle, true, bold, true, this.radial);
 		}
 	}
-	
+
 	this.drawHighlightCenter = function()
 	{
 		if ( ! this.canDisplayHistory() )
 		{
 			return;
 		}
-		
+
 		context.lineWidth = highlightLineWidth;
 		context.strokeStyle = 'black';
 		context.fillStyle = "rgba(255, 255, 255, .6)";
-		
+
 		context.fillStyle = 'black';
 		this.drawLabel(3 * Math.PI / 2, true, true, false);
 		context.font = fontNormal;
 	}
-	
+
 	this.drawKey = function(angle, highlight, bold)
 	{
 		var offset = keyOffset();
@@ -1339,10 +1340,10 @@ function Node()
 		var patternAlpha = this.alphaPattern.end;
 		var boxLeft = imageWidth - keySize - margin;
 		var textY = offset + keySize / 2;
-		
+
 		var label;
 		var keyNameWidth;
-		
+
 		if ( this == selectedNode )
 		{
 			color = colorUnclassified;
@@ -1356,14 +1357,14 @@ function Node()
 		{
 			label = this.keyLabel;
 			color = rgbText(this.r.end, this.g.end, this.b.end);
-			
+
 			if ( highlight )
 			{
 				if ( this.searchResultChildren() )
 				{
 					label = label + searchResultString(this.searchResultChildren());
 				}
-				
+
 				keyNameWidth = measureText(label, bold);
 			}
 			else
@@ -1371,49 +1372,49 @@ function Node()
 				keyNameWidth = this.keyNameWidth;
 			}
 		}
-		
+
 		var textLeft = boxLeft - keyBuffer - keyNameWidth - fontSize / 2;
 		var labelLeft = textLeft;
-		
+
 		if ( labelLeft > keyMinTextLeft - fontSize / 2 )
 		{
 			keyMinTextLeft -= fontSize / 2;
-			
+
 			if ( keyMinTextLeft < centerX - gRadius + fontSize / 2 )
 			{
 				keyMinTextLeft = centerX - gRadius + fontSize / 2;
 			}
-			
+
 			labelLeft = keyMinTextLeft;
 		}
-		
+
 		var lineX = new Array();
 		var lineY = new Array();
-		
+
 		var bendRadius;
 		var keyAngle = Math.atan((textY - centerY) / (labelLeft - centerX));
 		var arcAngle;
-		
+
 		if ( keyAngle < 0 )
 		{
 			keyAngle += Math.PI;
 		}
-		
+
 		if ( keyMinAngle == 0 || angle < keyMinAngle )
 		{
 			keyMinAngle = angle;
 		}
-		
+
 		if ( angle > Math.PI && keyMinAngle > Math.PI )
 		{
 			// allow lines to come underneath the chart
-			
+
 			angle -= Math.PI * 2;
 		}
-		
+
 		lineX.push(Math.cos(angle) * gRadius);
 		lineY.push(Math.sin(angle) * gRadius);
-		
+
 		if ( angle < keyAngle && textY > centerY + Math.sin(angle) * (gRadius + buffer * (currentKey - 1) / (keys + 1) / 2 + buffer / 2) )
 		{
 			bendRadius = gRadius + buffer - buffer * currentKey / (keys + 1) / 2;
@@ -1422,20 +1423,20 @@ function Node()
 		{
 			bendRadius = gRadius + buffer * currentKey / (keys + 1) / 2 + buffer / 2;
 		}
-		
+
 		var outside =
 			Math.sqrt
 			(
 				Math.pow(labelLeft - centerX, 2) +
 				Math.pow(textY - centerY, 2)
 			) > bendRadius;
-		
+
 		if ( ! outside )
 		{
 			arcAngle = Math.asin((textY - centerY) / bendRadius);
-			
+
 			keyMinTextLeft = min(keyMinTextLeft, centerX + bendRadius * Math.cos(arcAngle) - fontSize / 2);
-			
+
 			if ( labelLeft < textLeft && textLeft > centerX + bendRadius * Math.cos(arcAngle) )
 			{
 				lineX.push(textLeft - centerX);
@@ -1445,7 +1446,7 @@ function Node()
 		else
 		{
 			keyMinTextLeft = min(keyMinTextLeft, labelLeft - fontSize / 2);
-			
+
 			if ( angle < keyAngle )
 			{
 				// flip everything over y = x
@@ -1460,7 +1461,7 @@ function Node()
 					lineY,
 					lineX
 				);
-				
+
 			}
 			else
 			{
@@ -1476,27 +1477,27 @@ function Node()
 				);
 			}
 		}
-		
+
 		if ( labelLeft > centerX + bendRadius * Math.cos(arcAngle) ||
 		textY > centerY + bendRadius * Math.sin(arcAngle) + .01)
 //		if ( outside ||  )
 		{
 			lineX.push(labelLeft - centerX);
 			lineY.push(textY - centerY);
-			
+
 			if ( textLeft != labelLeft )
 			{
 				lineX.push(textLeft - centerX);
 				lineY.push(textY - centerY);
 			}
 		}
-		
+
 		context.globalAlpha = this.alphaWedge.current();
-		
+
 		if ( snapshotMode )
 		{
 			var labelSVG;
-			
+
 			if ( this == selectedNode )
 			{
 				labelSVG =
@@ -1508,12 +1509,12 @@ function Node()
 			{
 				labelSVG = this.name + spacer() + this.getPercentage() + '%';
 			}
-			
+
 			svg +=
 				'<rect fill="' + color + '" ' +
 				'x="' + boxLeft + '" y="' + offset +
 				'" width="' + keySize + '" height="' + keySize + '"/>';
-			
+
 			if ( patternAlpha )
 			{
 				svg +=
@@ -1521,13 +1522,13 @@ function Node()
 					'x="' + boxLeft + '" y="' + offset +
 					'" width="' + keySize + '" height="' + keySize + '"/>';
 			}
-			
+
 			svg +=
 				'<path class="line' +
 				(highlight ? ' highlight' : '') +
 				'" d="M ' + (lineX[0] + centerX) + ',' +
 				(lineY[0] + centerY);
-			
+
 			if ( angle != arcAngle )
 			{
 				svg +=
@@ -1538,23 +1539,23 @@ function Node()
 					(centerX + bendRadius * Math.cos(arcAngle)) + ',' +
 					(centerY + bendRadius * Math.sin(arcAngle));
 			}
-			
+
 			for ( var i = 1; i < lineX.length; i++ )
 			{
 				svg +=
 					' L ' + (centerX + lineX[i]) + ',' +
 					(centerY + lineY[i]);
 			}
-			
+
 			svg += '"/>';
-			
+
 			if ( highlight )
 			{
 				if ( this.searchResultChildren() )
 				{
 					labelSVG = labelSVG + searchResultString(this.searchResultChildren());
 				}
-				
+
 				drawBubbleSVG
 				(
 					boxLeft - keyBuffer - keyNameWidth - fontSize / 2,
@@ -1564,7 +1565,7 @@ function Node()
 					fontSize,
 					0
 				);
-				
+
 				if ( this.isSearchResult )
 				{
 					drawSearchHighlights
@@ -1576,7 +1577,7 @@ function Node()
 					)
 				}
 			}
-			
+
 			svg += svgText(labelSVG, boxLeft - keyBuffer, textY, 'end', bold, colorText);
 		}
 		else
@@ -1585,14 +1586,14 @@ function Node()
 			context.translate(-centerX, -centerY);
 			context.strokeStyle = 'black';
 				context.globalAlpha = 1;//this.alphaWedge.current();
-			
+
 			context.fillRect(boxLeft, offset, keySize, keySize);
-			
+
 			if ( patternAlpha )
 			{
 				context.globalAlpha = patternAlpha;
 				context.fillStyle = hiddenPattern;
-				
+
 				// make clipping box for Firefox performance
 				context.beginPath();
 				context.moveTo(boxLeft, offset);
@@ -1602,13 +1603,13 @@ function Node()
 				context.closePath();
 				context.save();
 				context.clip();
-				
+
 				context.fillRect(boxLeft, offset, keySize, keySize);
 				context.fillRect(boxLeft, offset, keySize, keySize);
-				
+
 				context.restore(); // remove clipping region
 			}
-			
+
 			if ( highlight )
 			{
 				this.setHighlightStyle();
@@ -1618,21 +1619,21 @@ function Node()
 			{
 				context.lineWidth = thinLineWidth;
 			}
-			
+
 			context.strokeRect(boxLeft, offset, keySize, keySize);
-			
+
 			if ( lineX.length )
 			{
 				context.beginPath();
 				context.moveTo(lineX[0] + centerX, lineY[0] + centerY);
-				
+
 				context.arc(centerX, centerY, bendRadius, angle, arcAngle, angle > arcAngle);
-				
+
 				for ( var i = 1; i < lineX.length; i++ )
 				{
 					context.lineTo(lineX[i] + centerX, lineY[i] + centerY);
 				}
-				
+
 				context.globalAlpha = this == selectedNode ?
 					this.children[0].alphaWedge.current() :
 					this.alphaWedge.current();
@@ -1640,7 +1641,7 @@ function Node()
 				context.stroke();
 				context.globalAlpha = 1;
 			}
-			
+
 			if ( highlight )
 			{
 				drawBubbleCanvas
@@ -1652,7 +1653,7 @@ function Node()
 					fontSize,
 					0
 				);
-				
+
 				if ( this.isSearchResult )
 				{
 					drawSearchHighlights
@@ -1664,26 +1665,26 @@ function Node()
 					)
 				}
 			}
-			
+
 			drawText(label, boxLeft - keyBuffer, offset + keySize / 2, 0, 'end', bold, colorText);
-			
+
 			context.translate(centerX, centerY);
 		}
-		
+
 		currentKey++;
 	}
-	
+
 	this.drawLabel = function(angle, bubble, bold, selected, radial)
 	{
 		if ( context.globalAlpha == 0 )
 		{
 			return;
 		}
-		
+
 		var innerText;
 		var label;
 		var radius;
-		
+
 		if ( radial )
 		{
 			radius = (this.radiusInner.current() + 1) * gRadius / 2;
@@ -1692,13 +1693,13 @@ function Node()
 		{
 			radius = this.labelRadius.current() * gRadius;
 		}
-		
+
 		if ( radial && (selected || bubble ) )
 		{
 			var percentage = this.getPercentage();
 			innerText = percentage + '%';
 		}
-		
+
 		if
 		(
 			! radial &&
@@ -1713,7 +1714,7 @@ function Node()
 		{
 			label = this.name;
 		}
-		
+
 		var flipped = drawTextPolar
 		(
 			label,
@@ -1727,9 +1728,9 @@ function Node()
 			this.isSearchResult && (!selected || this == selectedNode || bubble),
 			(this.hideAlone || !selected || this == selectedNode ) ? this.searchResultChildren() : 0
 		);
-		
+
 		var depth = this.getDepth() - selectedNode.getDepth() + 1;
-		
+
 		if
 		(
 			! radial &&
@@ -1744,11 +1745,11 @@ function Node()
 		{
 			// name extends beyond wedge; draw tick mark towards the central
 			// radius for easier identification
-			
+
 			var radiusCenter = compress ?
 				(compressedRadii[depth - 1] + compressedRadii[depth - 2]) / 2 :
 				(depth - .5) * nodeRadius;
-			
+
 			if ( this.labelRadius.end > radiusCenter )
 			{
 				if ( flipped )
@@ -1773,7 +1774,7 @@ function Node()
 			}
 		}
 	}
-	
+
 	this.drawLines = function(angleStart, angleEnd, radiusInner, drawRadial, selected)
 	{
 		if ( snapshotMode )
@@ -1786,21 +1787,21 @@ function Node()
 					//
 					angleEnd -= .1 / gRadius;
 				}
-				
+
 				var longArc = angleEnd - angleStart > Math.PI ? 1 : 0;
-				
+
 				var x1 = centerX + radiusInner * Math.cos(angleStart);
 				var y1 = centerY + radiusInner * Math.sin(angleStart);
-				
+
 				var x2 = centerX + gRadius * Math.cos(angleStart);
 				var y2 = centerY + gRadius * Math.sin(angleStart);
-				
+
 				var x3 = centerX + gRadius * Math.cos(angleEnd);
 				var y3 = centerY + gRadius * Math.sin(angleEnd);
-				
+
 				var x4 = centerX + radiusInner * Math.cos(angleEnd);
 				var y4 = centerY + radiusInner * Math.sin(angleEnd);
-				
+
 				if ( this.alphaArc.end )
 				{
 					var dArray =
@@ -1809,10 +1810,10 @@ function Node()
 						" A ", radiusInner, ",", radiusInner, " 0 ", longArc,
 							" 0 ", x1, ",", y1
 					];
-					
+
 					svg += '<path class="line" d="' + dArray.join('') + '"/>';
 				}
-				
+
 				if ( drawRadial && this.alphaLine.end )
 				{
 					svg += '<line x1="' + x3 + '" y1="' + y3 + '" x2="' + x4 + '" y2="' + y4 + '"/>';
@@ -1827,40 +1828,40 @@ function Node()
 			context.arc(0, 0, radiusInner, angleStart, angleEnd, false);
 			context.globalAlpha = this.alphaArc.current();
 			context.stroke();
-			
+
 			if ( drawRadial )
 			{
 				var x1 = radiusInner * Math.cos(angleEnd);
 				var y1 = radiusInner * Math.sin(angleEnd);
 				var x2 = gRadius * Math.cos(angleEnd);
 				var y2 = gRadius * Math.sin(angleEnd);
-				
+
 				context.beginPath();
 				context.moveTo(x1, y1);
 				context.lineTo(x2, y2);
-				
+
 //				if ( this.getCollapse() )//( selected && this != selectedNode )
 				{
 					context.globalAlpha = this.alphaLine.current();
 				}
-				
+
 				context.stroke();
 			}
 		}
 	}
-	
+
 	this.drawMap = function(child)
 	{
 		if ( this.parent )
 		{
 			this.parent.drawMap(child);
 		}
-		
+
 		if ( this.getCollapse() && this != child || this == focusNode )
 		{
 			return;
 		}
-		
+
 		var angleStart =
 			(child.baseMagnitude - this.baseMagnitude) / this.magnitude * Math.PI * 2 +
 			rotationOffset;
@@ -1868,19 +1869,19 @@ function Node()
 			(child.baseMagnitude - this.baseMagnitude + child.magnitude) /
 			this.magnitude * Math.PI * 2 +
 			rotationOffset;
-		
+
 		var box = this.getMapPosition();
-		
+
 		context.save();
 		context.fillStyle = 'black';
 		context.textAlign = 'end';
 		context.textBaseline = 'middle';
-		
+
 		var textX = box.x - mapRadius - mapBuffer;
 		var percentage = getPercentage(child.magnitude / this.magnitude);
-		
+
 		var highlight = this == selectedNode || this == highlightedNode;
-		
+
 		if ( highlight )
 		{
 			context.font = fontBold;
@@ -1889,15 +1890,15 @@ function Node()
 		{
 			context.font = fontNormal;
 		}
-		
+
 		context.fillText(percentage + '% of', textX, box.y - mapRadius / 3);
 		context.fillText(this.name, textX, box.y + mapRadius / 3);
-		
+
 		if ( highlight )
 		{
 			context.font = fontNormal;
 		}
-		
+
 		if ( this == highlightedNode && this != selectedNode )
 		{
 			context.fillStyle = 'rgb(245, 245, 245)';
@@ -1907,12 +1908,12 @@ function Node()
 		{
 			context.fillStyle = 'rgb(255, 255, 255)';
 		}
-		
+
 		context.beginPath();
 		context.arc(box.x, box.y, mapRadius, 0, Math.PI * 2, true);
 		context.closePath();
 		context.fill();
-		
+
 		if ( this == selectedNode )
 		{
 			context.lineWidth = 1;
@@ -1931,14 +1932,14 @@ function Node()
 				context.fillStyle = 'rgb(200, 200, 200)';
 			}
 		}
-		
+
 		var maxDepth = this.getMaxDepth();
-		
+
 		if ( ! compress && maxDepth > maxPossibleDepth + this.getDepth() - 1 )
 		{
 			maxDepth = maxPossibleDepth + this.getDepth() - 1;
 		}
-		
+
 		if ( this.getDepth() < selectedNode.getDepth() )
 		{
 			if ( child.getDepth() - 1 >= maxDepth )
@@ -1946,9 +1947,9 @@ function Node()
 				maxDepth = child.getDepth();
 			}
 		}
-		
+
 		var radiusInner;
-		
+
 		if ( compress )
 		{
 			radiusInner = 0;
@@ -1961,10 +1962,10 @@ function Node()
 				(child.getDepth() - this.getDepth()) /
 				(maxDepth - this.getDepth() + 1);
 		}
-		
+
 		context.stroke();
 		context.beginPath();
-		
+
 		if ( radiusInner == 0 )
 		{
 			context.moveTo(box.x, box.y);
@@ -1973,20 +1974,20 @@ function Node()
 		{
 			context.arc(box.x, box.y, mapRadius * radiusInner, angleEnd, angleStart, true);
 		}
-		
+
 		context.arc(box.x, box.y, mapRadius, angleStart, angleEnd, false);
 		context.closePath();
 		context.fill();
-		
+
 		if ( this == highlightedNode && this != selectedNode )
 		{
 			context.lineWidth = 1;
 			context.stroke();
 		}
-		
+
 		context.restore();
 	}
-	
+
 	this.drawReferenceRings = function(childRadiusInner)
 	{
 		if ( snapshotMode )
@@ -2009,7 +2010,7 @@ function Node()
 			context.stroke();
 		}
 	}
-	
+
 	this.getCollapse = function()
 	{
 		return (
@@ -2018,7 +2019,7 @@ function Node()
 			this.depth != maxAbsoluteDepth
 			);
 	}
-	
+
 	this.getDepth = function()
 	{
 		if ( collapse )
@@ -2030,12 +2031,12 @@ function Node()
 			return this.depth;
 		}
 	}
-	
+
 	this.getMagnitude = function()
 	{
 		return this.attributes[magnitudeIndex][currentDataset];
 	}
-	
+
 	this.getMapPosition = function()
 	{
 		return {
@@ -2045,11 +2046,11 @@ function Node()
 				details.clientHeight + details.offsetTop
 		};
 	}
-	
+
 	this.getMaxDepth = function(limit)
 	{
 		var max;
-		
+
 		if ( collapse )
 		{
 			return this.maxDepthCollapsed;
@@ -2066,11 +2067,11 @@ function Node()
 			}
 		}
 	}
-	
+
 	this.getData = function(index, summary)
 	{
 		var files = new Array();
-		
+
 		if
 		(
 			this.attributes[index] != null &&
@@ -2085,7 +2086,7 @@ function Node()
 				this.attributes[index][currentDataset]
 			);
 		}
-		
+
 		if ( summary )
 		{
 			for ( var i = 0; i < this.children.length; i++ )
@@ -2093,14 +2094,14 @@ function Node()
 				files = files.concat(this.children[i].getData(index, true));
 			}
 		}
-		
+
 		return files;
 	}
-	
+
 	this.getList = function(index, summary)
 	{
 		var list;
-		
+
 		if
 		(
 			this.attributes[index] != null &&
@@ -2113,7 +2114,7 @@ function Node()
 		{
 			list = new Array();
 		}
-		
+
 		if ( summary )
 		{
 			for ( var i = 0; i < this.children.length; i++ )
@@ -2121,33 +2122,33 @@ function Node()
 				list = list.concat(this.children[i].getList(index, true));
 			}
 		}
-		
+
 		return list;
 	}
-	
+
 	this.getParent = function()
 	{
 		// returns parent, accounting for collapsing or 0 if doesn't exist
-		
+
 		var parent = this.parent;
-		
+
 		while ( parent != 0 && parent.getCollapse() )
 		{
 			parent = parent.parent;
 		}
-		
+
 		return parent;
 	}
-	
+
 	this.getPercentage = function()
 	{
 		return getPercentage(this.magnitude / selectedNode.magnitude);
 	}
-	
+
 	this.getUnclassifiedPercentage = function()
 	{
 		var lastChild = this.children[this.children.length - 1];
-		
+
 		return getPercentage
 		(
 			(
@@ -2158,16 +2159,16 @@ function Node()
 			) / this.magnitude
 		) + '%';
 	}
-	
+
 	this.getUnclassifiedText = function()
 	{
 		return '[other '+ this.name + ']';
 	}
-	
+
 	this.getUncollapsed = function()
 	{
 		// recurse through collapsed children until uncollapsed node is found
-		
+
 		if ( this.getCollapse() )
 		{
 			return this.children[0].getUncollapsed();
@@ -2177,12 +2178,12 @@ function Node()
 			return this;
 		}
 	}
-	
+
 	this.hasChildren = function()
 	{
 		return this.children.length && this.depth < maxAbsoluteDepth && this.magnitude;
 	}
-	
+
 	this.hasParent = function(parent)
 	{
 		if ( this.parent )
@@ -2201,22 +2202,22 @@ function Node()
 			return false;
 		}
 	}
-	
+
 	this.maxVisibleDepth = function(maxDepth)
 	{
 		var childInnerRadius;
 		var depth = this.getDepth() - selectedNode.getDepth() + 1;
 		var currentMaxDepth = depth;
-		
+
 		if ( this.hasChildren() && depth < maxDepth)
 		{
 			var lastChild = this.children[this.children.length - 1];
-			
+
 			if ( this.name == 'Pseudomonadaceae' )
 			{
 				var x = 3;
 			}
-			
+
 			if
 			(
 				lastChild.baseMagnitude + lastChild.magnitude <
@@ -2225,7 +2226,7 @@ function Node()
 			{
 				currentMaxDepth++;
 			}
-			
+
 			if ( compress )
 			{
 				childInnerRadius = compressedRadii[depth - 1];
@@ -2234,7 +2235,7 @@ function Node()
 			{
 				childInnerRadius = (depth) / maxDepth;
 			}
-			
+
 			for ( var i = 0; i < this.children.length; i++ )
 			{
 				if
@@ -2247,7 +2248,7 @@ function Node()
 				)
 				{
 					var childMaxDepth = this.children[i].maxVisibleDepth(maxDepth);
-					
+
 					if ( childMaxDepth > currentMaxDepth )
 					{
 						currentMaxDepth = childMaxDepth;
@@ -2255,34 +2256,34 @@ function Node()
 				}
 			}
 		}
-		
+
 		return currentMaxDepth;
 	}
-	
+
 	this.resetLabelWidth = function()
 	{
 		var nameWidthOld = this.nameWidth;
-		
+
 		if ( true || ! this.radial )//&& fontSize != fontSizeLast )
 		{
 			var dim = context.measureText(this.name);
 			this.nameWidth = dim.width;
 		}
-		
+
 		if ( fontSize != fontSizeLast && this.labelWidth.end == nameWidthOld * labelWidthFudge )
 		{
 			// font size changed; adjust start of tween to match
-			
+
 			this.labelWidth.start = this.nameWidth * labelWidthFudge;
 		}
 		else
 		{
 			this.labelWidth.start = this.labelWidth.current();
 		}
-		
+
 		this.labelWidth.end = this.nameWidth * labelWidthFudge;
 	}
-	
+
 	this.restrictLabelWidth = function(width)
 	{
 		if ( width < this.labelWidth.end )
@@ -2290,12 +2291,12 @@ function Node()
 			this.labelWidth.end = width;
 		}
 	}
-	
+
 	this.search = function()
 	{
 		this.isSearchResult = false;
 		this.searchResults = 0;
-		
+
 		if
 		(
 			! this.getCollapse() &&
@@ -2307,15 +2308,15 @@ function Node()
 			this.searchResults = 1;
 			nSearchResults++;
 		}
-		
+
 		for ( var i = 0; i < this.children.length; i++ )
 		{
 			this.searchResults += this.children[i].search();
 		}
-		
+
 		return this.searchResults;
 	}
-	
+
 	this.searchResultChildren = function()
 	{
 		if ( this.isSearchResult )
@@ -2327,12 +2328,12 @@ function Node()
 			return this.searchResults;
 		}
 	}
-	
+
 	this.setDepth = function(depth, depthCollapsed)
 	{
 		this.depth = depth;
 		this.depthCollapsed = depthCollapsed;
-		
+
 		if
 		(
 			this.children.length == 1 &&
@@ -2348,17 +2349,17 @@ function Node()
 			this.collapse = false;
 			depthCollapsed++;
 		}
-		
+
 		for ( var i = 0; i < this.children.length; i++ )
 		{
 			this.children[i].setDepth(depth + 1, depthCollapsed);
 		}
 	}
-	
+
 	this.setHighlightStyle = function()
 	{
 		context.lineWidth = highlightLineWidth;
-		
+
 		if ( this.hasChildren() || this != focusNode || this != highlightedNode )
 		{
 			context.strokeStyle = 'black';
@@ -2370,23 +2371,23 @@ function Node()
 			context.fillStyle = "rgba(155, 155, 155, .3)";
 		}
 	}
-	
+
 	this.setLabelWidth = function(node)
 	{
 		if ( ! shorten || this.radial )
 		{
 			return; // don't need to set width
 		}
-		
+
 		if ( node.hide )
 		{
 			alert('wtf');
 			return;
 		}
-		
+
 		var angle = (this.angleStart.end + this.angleEnd.end) / 2;
 		var a; // angle difference
-		
+
 		if ( node == selectedNode )
 		{
 			a = Math.abs(angle - node.angleOther);
@@ -2395,39 +2396,39 @@ function Node()
 		{
 			a = Math.abs(angle - (node.angleStart.end + node.angleEnd.end) / 2);
 		}
-		
+
 		if ( a == 0 )
 		{
 			return;
 		}
-		
+
 		if ( a > Math.PI )
 		{
 			a = 2 * Math.PI - a;
 		}
-		
+
 		if ( node.radial || node == selectedNode )
 		{
 			var nodeLabelRadius;
-			
+
 			if ( node == selectedNode )
 			{
 				// radial 'other' label
-				
+
 				nodeLabelRadius = (node.children[0].radiusInner.end + 1) / 2;
 			}
 			else
 			{
 				nodeLabelRadius = (node.radiusInner.end + 1) / 2;
 			}
-			
+
 			if ( a < Math.PI / 2 )
 			{
 				var r = this.labelRadius.end * gRadius + .5 * fontSize
 				var hypotenuse = r / Math.cos(a);
 				var opposite = r * Math.tan(a);
 				var fontRadius = .8 * fontSize;
-				
+
 				if
 				(
 					nodeLabelRadius * gRadius < hypotenuse &&
@@ -2445,9 +2446,9 @@ function Node()
 		)
 		{
 			// same radius with small angle; use circumferential approximation
-			
+
 			var dist = a * this.labelRadius.end * gRadius - fontSize * (1 - a * 4 / Math.PI) * 1.3;
-			
+
 			if ( this.labelWidth.end < dist )
 			{
 				node.restrictLabelWidth((dist - this.labelWidth.end / 2) * 2);
@@ -2459,7 +2460,7 @@ function Node()
 			else
 			{
 				// both labels reach halfway point; restrict both
-				
+
 				this.labelWidth.end = dist;
 				node.labelWidth.end = dist
 			}
@@ -2468,7 +2469,7 @@ function Node()
 		{
 			var r1 = this.labelRadius.end * gRadius;
 			var r2 = node.labelRadius.end * gRadius;
-			
+
 			// first adjust the radii to account for the height of the font by shifting them
 			// toward each other
 			//
@@ -2489,29 +2490,29 @@ function Node()
 				r1 -= fontFudge;
 				r2 -= fontFudge;
 			}
-			
+
 			var r1s = r1 * r1;
 			var r2s = r2 * r2;
-			
+
 			// distance between the centers of the two labels
 			//
 			var dist = Math.sqrt(r1s + r2s - 2 * r1 * r2 * Math.cos(a));
-			
+
 			// angle at our label center between our radius and the line to the other label center
 			//
 			var b = Math.acos((r1s + dist * dist - r2s) / (2 * r1 * dist));
-			
+
 			// distance from our label center to the intersection of the two tangents
 			//
 			var l1 = Math.sin(a + b - Math.PI / 2) * dist / Math.sin(Math.PI - a);
-			
+
 			// distance from other label center the the intersection of the two tangents
 			//
 			var l2 = Math.sin(Math.PI / 2 - b) * dist / Math.sin(Math.PI - a);
-			
+
 			l1 = Math.abs(l1) - .4 * fontSize;
 			l2 = Math.abs(l2) - .4 * fontSize;
-/*			
+/*
 			// amount to shorten the distances because of the height of the font
 			//
 			var l3 = 0;
@@ -2522,21 +2523,21 @@ function Node()
 				var l4 = fontRadius / Math.tan(a);
 			l1 = Math.abs(l1);
 			l2 = Math.abs(l2);
-			
+
 				l1 -= l4;
 				l2 -= l4;
 			}
 			else
 			{
 				var c = Math.PI - a;
-				
+
 				l3 = fontRadius * Math.tan(c / 2);
 			}
-*/			
+*/
 			if ( this.labelWidth.end / 2 > l1 && node.labelWidth.end / 2 > l2 )
 			{
 				// shorten the farthest one from the intersection
-				
+
 				if ( l1 > l2 )
 				{
 					this.restrictLabelWidth(2 * (l1));// - l3 - fontRadius));
@@ -2556,37 +2557,37 @@ function Node()
 			}*/
 		}
 	}
-	
+
 	this.setMagnitudes = function(baseMagnitude)
 	{
 		this.magnitude = this.getMagnitude();
 		this.baseMagnitude = baseMagnitude;
-		
+
 		for ( var i = 0; i < this.children.length; i++ )
 		{
 			this.children[i].setMagnitudes(baseMagnitude);
 			baseMagnitude += this.children[i].magnitude;
 		}
-		
+
 		this.maxChildMagnitude = baseMagnitude;
 	}
-	
+
 	this.setMaxDepths = function()
 	{
 		this.maxDepth = this.depth;
 		this.maxDepthCollapsed = this.depthCollapsed;
-		
+
 		for ( i in this.children )
 		{
 			var child = this.children[i];
-			
+
 			child.setMaxDepths();
-			
+
 			if ( child.maxDepth > this.maxDepth )
 			{
 				this.maxDepth = child.maxDepth;
 			}
-			
+
 			if
 			(
 				child.maxDepthCollapsed > this.maxDepthCollapsed &&
@@ -2597,13 +2598,13 @@ function Node()
 			}
 		}
 	}
-	
+
 	this.setTargetLabelRadius = function()
 	{
 		var depth = this.getDepth() - selectedNode.getDepth() + 1;
 		var index = depth - 2;
 		var labelOffset = labelOffsets[index];
-		
+
 		if ( this.radial )
 		{
 			//this.labelRadius.setTarget((this.radiusInner.end + 1) / 2);
@@ -2611,14 +2612,14 @@ function Node()
 				depth == maxDisplayDepth ?
 				1 :
 				compressedRadii[index + 1];
-			
+
 			this.labelRadius.setTarget((compressedRadii[index] + max) / 2);
 		}
 		else
 		{
 			var radiusCenter;
 			var width;
-			
+
 			if ( compress )
 			{
 				if ( nLabelOffsets[index] > 1 )
@@ -2646,25 +2647,25 @@ function Node()
 					nodeRadius * (depth - 1) +
 					nodeRadius / 2;
 				width = nodeRadius;
-				
+
 				this.labelRadius.setTarget
 				(
 					radiusCenter + width * ((labelOffset + 1) / (nLabelOffsets[index] + 1) - .5)
 				);
 			}
 		}
-		
+
 		if ( ! this.hide && ! this.keyed && nLabelOffsets[index] )
 		{
 			// check last and first labels in each track for overlap
-			
+
 			for ( var i = 0; i < maxDisplayDepth - 1; i++ )
 			{
 				for ( var j = 0; j <= nLabelOffsets[i]; j++ )
 				{
 					var last = labelLastNodes[i][j];
 					var first = labelFirstNodes[i][j];
-					
+
 					if ( last )
 					{
 						if ( j == nLabelOffsets[i] )
@@ -2677,7 +2678,7 @@ function Node()
 							last.setLabelWidth(this);
 						}
 					}
-					
+
 					if ( first )
 					{
 						if ( j == nLabelOffsets[i] )
@@ -2691,18 +2692,18 @@ function Node()
 					}
 				}
 			}
-			
+
 			if ( selectedNode.canDisplayLabelOther )
 			{
 				this.setLabelWidth(selectedNode); // in case there is an 'other' label
 			}
-			
+
 			if ( this.radial )
 			{
 				// use the last 'track' of this depth for radial
-				
+
 				labelLastNodes[index][nLabelOffsets[index]] = this;
-				
+
 				if ( labelFirstNodes[index][nLabelOffsets[index]] == 0 )
 				{
 					labelFirstNodes[index][nLabelOffsets[index]] = this;
@@ -2711,15 +2712,15 @@ function Node()
 			else
 			{
 				labelLastNodes[index][labelOffset] = this;
-				
+
 				// update offset
-				
+
 				labelOffsets[index] += 1;
-				
+
 				if ( labelOffsets[index] > nLabelOffsets[index] )
 				{
 					labelOffsets[index] -= nLabelOffsets[index];
-					
+
 					if ( !(nLabelOffsets[index] & 1) )
 					{
 						labelOffsets[index]--;
@@ -2728,13 +2729,13 @@ function Node()
 				else if ( labelOffsets[index] == nLabelOffsets[index] )
 				{
 					labelOffsets[index] -= nLabelOffsets[index];
-					
+
 					if ( false && !(nLabelOffsets[index] & 1) )
 					{
 						labelOffsets[index]++;
 					}
 				}
-				
+
 				if ( labelFirstNodes[index][labelOffset] == 0 )
 				{
 					labelFirstNodes[index][labelOffset] = this;
@@ -2746,7 +2747,7 @@ function Node()
 			this.labelWidth.end = 0;
 		}
 	}
-	
+
 	this.setTargets = function()
 	{
 		if ( this == selectedNode )
@@ -2761,9 +2762,9 @@ function Node()
 			);
 			return;
 		}
-		
+
 		var depthRelative = this.getDepth() - selectedNode.getDepth();
-		
+
 		var parentOfSelected = selectedNode.hasParent(this);
 /*		(
 //			! this.getCollapse() &&
@@ -2771,7 +2772,7 @@ function Node()
 			this.baseMagnitude + this.magnitude >=
 			selectedNode.baseMagnitude + selectedNode.magnitude
 		);
-*/		
+*/
 		if ( parentOfSelected )
 		{
 			this.resetLabelWidth();
@@ -2784,7 +2785,7 @@ function Node()
 			//this.labelWidth.setTarget(this.labelWidth.end);
 			this.labelWidth.setTarget(0);
 		}
-		
+
 		// set angles
 		//
 		if ( this.baseMagnitude <= selectedNode.baseMagnitude )
@@ -2809,20 +2810,20 @@ function Node()
 		{
 			this.angleEnd.setTarget(0);
 		}
-		
+
 		// children
 		//
 		for ( var i = 0; i < this.children.length; i++ )
 		{
 			this.children[i].setTargets();
 		}
-		
+
 		if ( this.getDepth() <= selectedNode.getDepth() )
 		{
 			// collapse in
-			
+
 			this.radiusInner.setTarget(0);
-			
+
 			if ( parentOfSelected )
 			{
 				this.labelRadius.setTarget
@@ -2841,7 +2842,7 @@ function Node()
 		else if ( depthRelative + 1 > maxDisplayDepth )
 		{
 			// collapse out
-			
+
 			this.radiusInner.setTarget(1);
 			this.labelRadius.setTarget(1);
 			//this.scale.setTarget(1); // TEMP
@@ -2849,7 +2850,7 @@ function Node()
 		else
 		{
 			// don't collapse
-			
+
 			if ( compress )
 			{
 				this.radiusInner.setTarget(compressedRadii[depthRelative - 1]);
@@ -2858,9 +2859,9 @@ function Node()
 			{
 				this.radiusInner.setTarget(nodeRadius * (depthRelative));
 			}
-			
+
 			//this.scale.setTarget(1); // TEMP
-			
+
 			if ( this == selectedNode )
 			{
 				this.labelRadius.setTarget(0);
@@ -2880,11 +2881,11 @@ function Node()
 				}
 			}
 		}
-		
+
 //		this.r.start = this.r.end;
 //		this.g.start = this.g.end;
 //		this.b.start = this.b.end;
-		
+
 		this.r.setTarget(255);
 		this.g.setTarget(255);
 		this.b.setTarget(255);
@@ -2894,7 +2895,7 @@ function Node()
 		this.alphaWedge.setTarget(0);
 		this.alphaPattern.setTarget(0);
 		this.alphaOther.setTarget(0);
-		
+
 		if ( parentOfSelected && ! this.getCollapse() )
 		{
 			var alpha =
@@ -2903,12 +2904,12 @@ function Node()
 				(selectedNode.getDepth() - this.getDepth()) /
 				(Math.floor((compress ? compressedRadii[0] : nodeRadius) * gRadius / (historySpacingFactor * fontSize) - .5) + 1)
 			);
-			
+
 			if ( alpha < 0 )
 			{
 				alpha = 0;
 			}
-			
+
 			this.alphaLabel.setTarget(alpha);
 			this.radial = false;
 		}
@@ -2916,31 +2917,31 @@ function Node()
 		{
 			this.alphaLabel.setTarget(0);
 		}
-		
+
 		this.hideAlonePrev = this.hideAlone;
 		this.hidePrev = this.hide;
-		
+
 		if ( parentOfSelected )
 		{
 			this.hideAlone = false;
 			this.hide = false;
 		}
-		
+
 		if ( this.getParent() == selectedNode.getParent() )
 		{
 			this.hiddenEnd = null;
 		}
-		
+
 		this.radialPrev = this.radial;
 	}
-	
+
 	this.setTargetsSelected = function(hueMin, hueMax, lightness, hide, nextSiblingHidden)
 	{
 		var collapse = this.getCollapse();
 		var depth = this.getDepth() - selectedNode.getDepth() + 1;
 		var canDisplayChildLabels = false;
 		var lastChild;
-		
+
 		if ( this.hasChildren() )//&& ! hide )
 		{
 			lastChild = this.children[this.children.length - 1];
@@ -2950,13 +2951,13 @@ function Node()
 		{
 			this.hideAlone = false;
 		}
-		
+
 		// set child wedges
 		//
 		for ( var i = 0; i < this.children.length; i++ )
 		{
 			this.children[i].setTargetWedge();
-			
+
 			if
 			(
 				! this.children[i].hide &&
@@ -2968,20 +2969,20 @@ function Node()
 				this.hideAlone = false;
 			}
 		}
-		
+
 		if ( this == selectedNode || lastChild && lastChild.angleEnd.end < this.angleEnd.end - .01)
 		{
 			this.hideAlone = false;
 		}
-		
+
 		if ( this.hideAlonePrev == undefined )
 		{
 			this.hideAlonePrev = this.hideAlone;
 		}
-		
+
 		if ( this == selectedNode )
 		{
-			var otherArc = 
+			var otherArc =
 				angleFactor *
 				(
 					this.baseMagnitude + this.magnitude -
@@ -2991,9 +2992,9 @@ function Node()
 				otherArc *
 				(this.children[0].radiusInner.end + 1) * gRadius >=
 				minWidth();
-			
+
 			this.keyUnclassified = false;
-			
+
 			if ( this.canDisplayLabelOther )
 			{
 				this.angleOther = Math.PI * 2 - otherArc / 2;
@@ -3003,7 +3004,7 @@ function Node()
 				this.keyUnclassified = true;
 				keys++;
 			}
-			
+
 			this.angleStart.setTarget(0);
 			this.angleEnd.setTarget(Math.PI * 2);
 			this.radiusInner.setTarget(0);
@@ -3013,12 +3014,12 @@ function Node()
 			this.hideAlone = false;
 			this.keyed = false;
 		}
-		
+
 		if ( hueMax - hueMin > 1 / 12 )
 		{
 			hueMax = hueMin + 1 / 12;
 		}
-		
+
 		// set lightness
 		//
 		if ( ! ( hide || this.hideAlone ) )
@@ -3030,34 +3031,34 @@ function Node()
 			else
 			{
 				lightness = lightnessBase + (depth - 1) * lightnessFactor;
-				
+
 				if ( lightness > lightnessMax )
 				{
 					lightness = lightnessMax;
 				}
 			}
 		}
-		
+
 		if ( hide )
 		{
 			this.hide = true;
 		}
-		
+
 		if ( this.hidePrev == undefined )
 		{
 			this.hidePrev = this.hide;
 		}
-		
+
 		var hiddenStart = -1;
 		var hiddenHueNumer = 0;
 		var hiddenHueDenom = 0;
 		var i = 0;
-		
+
 		if ( ! this.hide )
 		{
 			this.hiddenEnd = null;
 		}
-		
+
 		while ( true )
 		{
 			if ( ! this.hideAlone && ! hide && ( i == this.children.length || ! this.children[i].hide ) )
@@ -3065,11 +3066,11 @@ function Node()
 				// reached a non-hidden child or the end; set targets for
 				// previous group of hidden children (if any) using their
 				// average hue
-				
+
 				if ( hiddenStart != -1 )
 				{
 					var hiddenHue = hiddenHueDenom ? hiddenHueNumer / hiddenHueDenom : hueMin;
-					
+
 					for ( var j = hiddenStart; j < i; j++ )
 					{
 						this.children[j].setTargetsSelected
@@ -3080,23 +3081,23 @@ function Node()
 							false,
 							j < i - 1
 						);
-						
+
 						this.children[j].hiddenEnd = null;
 					}
-					
+
 					this.children[hiddenStart].hiddenEnd = i - 1;
 				}
 			}
-			
+
 			if ( i == this.children.length )
 			{
 				break;
 			}
-			
+
 			var child = this.children[i];
 			var childHueMin;
 			var childHueMax;
-			
+
 			if ( this.magnitude > 0 && ! this.hide && ! this.hideAlone )
 			{
 				if ( useHue() )
@@ -3107,7 +3108,7 @@ function Node()
 				{
 					var min = 0.0;
 					var max = 1.0;
-					
+
 					if ( this.children.length > 6 )
 					{
 						childHueMin = lerp((1 - Math.pow(1 - i / this.children.length, 1.4)) * .95, 0, 1, min, max);
@@ -3124,7 +3125,7 @@ function Node()
 					childHueMin = lerp
 					(
 						child.baseMagnitude,
-						this.baseMagnitude, 
+						this.baseMagnitude,
 						this.baseMagnitude + this.magnitude,
 						hueMin,
 						hueMax
@@ -3144,14 +3145,14 @@ function Node()
 				childHueMin = hueMin;
 				childHueMax = hueMax;
 			}
-			
+
 			if ( ! this.hideAlone && ! hide && ! this.hide && child.hide )
 			{
 				if ( hiddenStart == -1 )
 				{
 					hiddenStart = i;
 				}
-				
+
 				if ( useHue() )
 				{
 					hiddenHueNumer += childHueMin * child.magnitude;
@@ -3166,7 +3167,7 @@ function Node()
 			else
 			{
 				hiddenStart = -1;
-				
+
 				this.children[i].setTargetsSelected
 				(
 					childHueMin,
@@ -3176,22 +3177,22 @@ function Node()
 					false
 				);
 			}
-			
+
 			i++;
 		}
-		
+
 	 	if ( this.hue && this.magnitude )
 	 	{
 		 	this.hue.setTarget(this.hues[currentDataset]);
-			
+
 			if ( this.attributes[magnitudeIndex][lastDataset] == 0 )
 			{
 				this.hue.start = this.hue.end;
 			}
 		}
-	 	
+
 		this.radialPrev = this.radial;
-		
+
 		if ( this == selectedNode )
 		{
 			this.resetLabelWidth();
@@ -3216,14 +3217,14 @@ function Node()
 				saturation,
 				lightness
 			);
-			
+
 			this.r.setTarget(rgb.r);
 			this.g.setTarget(rgb.g);
 			this.b.setTarget(rgb.b);
 			this.alphaOther.setTarget(0);
-			
+
 			this.alphaWedge.setTarget(1);
-			
+
 			if ( this.hide || this.hideAlone )
 			{
 				this.alphaPattern.setTarget(1);
@@ -3232,7 +3233,7 @@ function Node()
 			{
 				this.alphaPattern.setTarget(0);
 			}
-			
+
 			// set radial
 			//
 			if ( ! ( hide || this.hide ) )//&& ! this.keyed )
@@ -3248,11 +3249,11 @@ function Node()
 				else
 				{
 					this.radial = true;
-					
+
 					if ( this.hasChildren() && depth < maxDisplayDepth )
 					{
 						var lastChild = this.children[this.children.length - 1];
-						
+
 						if
 						(
 							lastChild.angleEnd.end == this.angleEnd.end ||
@@ -3268,7 +3269,7 @@ function Node()
 					}
 				}
 			}
-			
+
 			// set alphaLabel
 			//
 			if
@@ -3295,14 +3296,14 @@ function Node()
 				else
 				{
 					this.alphaLabel.setTarget(0);
-					
+
 					if ( this.radialPrev )
 					{
 						this.alphaLabel.start = 0;
 					}
 				}
 			}
-			
+
 			// set alphaArc
 			//
 			if
@@ -3319,7 +3320,7 @@ function Node()
 			{
 				this.alphaArc.setTarget(1);
 			}
-			
+
 			// set alphaLine
 			//
 			if
@@ -3336,12 +3337,12 @@ function Node()
 			{
 				this.alphaLine.setTarget(1);
 			}
-			
+
 			//if (  ! this.radial )
 			{
 				this.resetLabelWidth();
 			}
-			
+
 			// set labelRadius target
 			//
 			if ( collapse )
@@ -3361,18 +3362,18 @@ function Node()
 			}
 		}
 	}
-	
+
 	this.setTargetWedge = function()
 	{
 		var depth = this.getDepth() - selectedNode.getDepth() + 1;
-		
+
 		// set angles
 		//
 		var baseMagnitudeRelative = this.baseMagnitude - selectedNode.baseMagnitude;
 		//
 		this.angleStart.setTarget(baseMagnitudeRelative * angleFactor);
 		this.angleEnd.setTarget((baseMagnitudeRelative + this.magnitude) * angleFactor);
-		
+
 		// set radiusInner
 		//
 		if ( depth > maxDisplayDepth || ! this.canDisplayDepth() )
@@ -3390,17 +3391,17 @@ function Node()
 				this.radiusInner.setTarget(nodeRadius * (depth - 1));
 			}
 		}
-		
+
 		if ( this.hide != undefined )
 		{
 			this.hidePrev = this.hide;
 		}
-		
+
 		if ( this.hideAlone != undefined )
 		{
 			this.hideAlonePrev = this.hideAlone;
 		}
-		
+
 		// set hide
 		//
 		if
@@ -3415,7 +3416,7 @@ function Node()
 				this.keyed = true;
 				keys++;
 				this.hide = false;
-				
+
 				var percentage = this.getPercentage();
 				this.keyLabel = this.name + '   ' + percentage + '%';
 				var dim = context.measureText(this.keyLabel);
@@ -3433,25 +3434,25 @@ function Node()
 			this.hide = false;
 		}
 	}
-	
+
 	this.shortenLabel = function()
 	{
 		var label = this.name;
-		
+
 		var labelWidth = this.nameWidth;
 		var maxWidth = this.labelWidth.current();
 		var minEndLength = 0;
-		
+
 		if ( labelWidth > maxWidth && label.length > minEndLength * 2 )
 		{
 			var endLength =
 				Math.floor((label.length - 1) * maxWidth / labelWidth / 2);
-			
+
 			if ( endLength < minEndLength )
 			{
 				endLength = minEndLength;
 			}
-			
+
 			return (
 				label.substring(0, endLength) +
 				'...' +
@@ -3462,7 +3463,7 @@ function Node()
 			return label;
 		}
 	}
-	
+
 /*	this.shouldAddSearchResultsString = function()
 	{
 		if ( this.isSearchResult )
@@ -3474,11 +3475,11 @@ function Node()
 			return this.searchResults > 0;
 		}
 	}
-*/	
+*/
 	this.sort = function()
 	{
 		this.children.sort(function(a, b){return b.getMagnitude() - a.getMagnitude()});
-		
+
 		for (var i = 0; i < this.children.length; i++)
 		{
 			this.children[i].sort();
@@ -3496,12 +3497,12 @@ function addOptionElement(position, innerHTML, title)
 	div.innerHTML = innerHTML;
 //	div.style.display = 'block';
 	div.style.padding = '2px';
-	
+
 	if ( title )
 	{
 		div.title = title;
 	}
-	
+
 	options.appendChild(div);
 	var height = 0;//div.clientHeight;
 	return position + height;
@@ -3516,10 +3517,10 @@ function addOptionElements(hueName, hueDefault)
 	options.addEventListener('mousedown', function(e) {mouseClick(e)}, false);
 //	options.onmouseup = function(e) {mouseUp(e)}
 	document.body.appendChild(options);
-	
+
 	document.body.style.font = '11px sans-serif';
 	var position = 5;
-	
+
 	details = document.createElement('div');
 	details.style.position = 'absolute';
 	details.style.top = '1%';
@@ -3540,11 +3541,11 @@ value="&harr;" title="Expand this wedge to become the new focus of the chart"/><
 	keyControl.style.position = '';
 	keyControl.style.position = 'fixed';
 	keyControl.style.visibility = 'hidden';
-	
+
 	document.body.insertBefore(keyControl, canvas);
-	
+
 	var logoElement = document.getElementById('logo');
-	
+
 	if ( logoElement )
 	{
 		logoImage = logoElement.src;
@@ -3553,7 +3554,7 @@ value="&harr;" title="Expand this wedge to become the new focus of the chart"/><
 	{
 		logoImage = 'http://marbl.github.io/Krona/img/logo.png';
 	}
-	
+
 //	document.getElementById('options').style.fontSize = '9pt';
 	position = addOptionElement
 	(
@@ -3564,36 +3565,36 @@ value="&harr;" title="Expand this wedge to become the new focus of the chart"/><
 <input id="searchClear" type="button" value="x" onclick="clearSearch()"/> \
 <span id="searchResults"></span>'
 	);
-	
+
 	if ( datasets > 1 )
 	{
 		var size = datasets < datasetSelectSize ? datasets : datasetSelectSize;
-		
+
 		var select =
 			'<table style="border-collapse:collapse;padding:0px"><tr><td style="padding:0px">' +
 			'<select id="datasets" style="min-width:100px" size="' + size + '" onchange="onDatasetChange()">';
-		
+
 		for ( var i = 0; i < datasetNames.length; i++ )
 		{
 			select += '<option>' + datasetNames[i] + '</option>';
 		}
-		
+
 		select +=
 			'</select></td><td style="vertical-align:top;padding:1px;">' +
 			'<input style="display:block" title="Previous dataset (Shortcut: &uarr;)" id="prevDataset" type="button" value="&uarr;" onclick="prevDataset()" disabled="true"/>' +
 			'<input title="Next dataset (Shortcut: &darr;)" id="nextDataset" type="button" value="&darr;" onclick="nextDataset()"/><br/></td>' +
 			'<td style="padding-top:1px;vertical-align:top"><input title="Switch to the last dataset that was viewed (Shortcut: TAB)" id="lastDataset" type="button" style="font:11px Times new roman" value="last" onclick="selectLastDataset()"/></td></tr></table>';
-		
+
 		position = addOptionElement(position + 5, select);
-		
+
 		datasetDropDown = document.getElementById('datasets');
 		datasetButtonLast = document.getElementById('lastDataset');
 		datasetButtonPrev = document.getElementById('prevDataset');
 		datasetButtonNext = document.getElementById('nextDataset');
-		
+
 		position += datasetDropDown.clientHeight;
 	}
-	
+
 	position = addOptionElement
 	(
 		position + 5,
@@ -3603,7 +3604,7 @@ value="&harr;" title="Expand this wedge to become the new focus of the chart"/><
 'Maximum depth to display, counted from the top level \
 and including collapsed wedges.'
 	);
-	
+
 	position = addOptionElement
 	(
 		position,
@@ -3611,18 +3612,18 @@ and including collapsed wedges.'
 <span id="fontSize"></span>\
 &nbsp;<input type="button" id="fontSizeIncrease" value="+"/> Font size'
 	);
-	
+
 	position = addOptionElement
 	(
 		position,
 '<input type="button" id="radiusDecrease" value="-"/>\
 <input type="button" id="radiusIncrease" value="+"/> Chart size'
 	);
-	
+
 	if ( hueName )
 	{
 		hueDisplayName = attributes[attributeIndex(hueName)].displayName;
-		
+
 		position = addOptionElement
 		(
 			position + 5,
@@ -3630,7 +3631,7 @@ and including collapsed wedges.'
 			'/><div>Color by<br/>' + hueDisplayName +
 			'</div>'
 		);
-		
+
 		useHueCheckBox = document.getElementById('useHue');
 		useHueCheckBox.checked = hueDefault;
 		useHueCheckBox.onclick = handleResize;
@@ -3643,7 +3644,7 @@ and including collapsed wedges.'
 		'&nbsp;<input type="checkbox" id="shorten" checked="checked" />Shorten labels</div>',
 		'Prevent labels from overlapping by shortening them'
 	);
-	
+
 	position = addOptionElement
 	(
 		position,
@@ -3657,7 +3658,7 @@ and including collapsed wedges.'
 		'<input type="checkbox" id="collapse" checked="checked" />Collapse',
 		'Collapse wedges that are redundant (entirely composed of another wedge)'
 	);
-	
+
 	position = addOptionElement
 	(
 		position + 5,
@@ -3665,7 +3666,7 @@ and including collapsed wedges.'
 'Render the current view as SVG (Scalable Vector Graphics), a publication-\
 quality format that can be printed and saved (see Help for browser compatibility)'
 	);
-	
+
 	position = addOptionElement
 	(
 		position + 5,
@@ -3673,7 +3674,7 @@ quality format that can be printed and saved (see Help for browser compatibility
 <input type="text" size="30" id="linkText"/>',
 'Show a link to this view that can be copied for bookmarking or sharing'
 	);
-	
+
 	position = addOptionElement
 	(
 		position + 5,
@@ -3689,16 +3690,16 @@ function arrow(angleStart, angleEnd, radiusInner)
 	{
 		return;
 	}
-	
+
 	var angleCenter = (angleStart + angleEnd) / 2;
 	var radiusArrowInner = radiusInner - gRadius / 10;//nodeRadius * gRadius;
 	var radiusArrowOuter = gRadius * 1.1;//(1 + nodeRadius);
 	var radiusArrowCenter = (radiusArrowInner + radiusArrowOuter) / 2;
 	var pointLength = (radiusArrowOuter - radiusArrowInner) / 5;
-	
+
 	context.fillStyle = highlightFill;
 	context.lineWidth = highlightLineWidth;
-	
+
 	// First, mask out the first half of the arrow.  This will prevent the tips
 	// from superimposing if the arrow goes most of the way around the circle.
 	// Masking is done by setting the clipping region to the inverse of the
@@ -3731,7 +3732,7 @@ function arrow(angleStart, angleEnd, radiusInner)
 	context.closePath();
 	context.save();
 	context.clip();
-	
+
 	// Next, draw the other half-arrow with the first half masked out
 	//
 	context.beginPath();
@@ -3754,7 +3755,7 @@ function arrow(angleStart, angleEnd, radiusInner)
 	context.arc(0, 0, gRadius, angleStart, angleCenter, false);
 	context.fill();
 	context.stroke();
-	
+
 	// Finally, remove the clipping region and draw the first half-arrow.  This
 	// half is extended slightly to fill the seam.
 	//
@@ -3790,7 +3791,7 @@ function attributeIndex(aname)
 			return i;
 		}
 	}
-	
+
 	return null;
 }
 
@@ -3798,10 +3799,10 @@ function checkHighlight()
 {
 	var lastHighlightedNode = highlightedNode;
 	var lastHighlightingHidden = highlightingHidden;
-	
+
 	highlightedNode = selectedNode;
 	resetKeyOffset();
-	
+
 	if ( progress == 1 )
 	{
 		selectedNode.checkHighlight();
@@ -3809,10 +3810,10 @@ function checkHighlight()
 		{
 			selectedNode.getParent().checkHighlightCenter();
 		}
-		
+
 		focusNode.checkHighlightMap();
 	}
-	
+
 	if ( highlightedNode != selectedNode )
 	{
 		if ( highlightedNode == focusNode )
@@ -3832,7 +3833,7 @@ function checkHighlight()
 	{
 //		canvas.style.cursor='auto';
 	}
-	
+
 	if
 	(
 		(
@@ -3850,17 +3851,17 @@ function checkHighlight()
 function checkSelectedCollapse()
 {
 	var newNode = selectedNode;
-	
+
 	while ( newNode.getCollapse() )
 	{
 		newNode = newNode.children[0];
 	}
-	
+
 	if ( newNode.children.length == 0 )
 	{
 		newNode = newNode.getParent();
 	}
-	
+
 	if ( newNode != selectedNode )
 	{
 		selectNode(newNode);
@@ -3881,9 +3882,9 @@ function createSVG()
 	svgNS = "http://www.w3.org/2000/svg";
 	var SVG = {};
 	SVG.xlinkns = "http://www.w3.org/1999/xlink";
-	
+
 	var newSVG = document.createElementNS(svgNS, "svg:svg");
-	
+
 	newSVG.setAttribute("id", "canvas");
 	// How big is the canvas in pixels
 	newSVG.setAttribute("width", '100%');
@@ -3897,7 +3898,7 @@ function createSVG()
 		"xmlns:xlink",
 		SVG.xlinkns
 	);
-	
+
 	return newSVG;
 }
 
@@ -3912,27 +3913,27 @@ function draw()
 	//resize();
 //	context.fillRect(0, 0, imageWidth, imageHeight);
 	context.clearRect(0, 0, imageWidth, imageHeight);
-	
+
 	context.font = fontNormal;
 	context.textBaseline = 'middle';
-	
+
 	//context.strokeStyle = 'rgba(0, 0, 0, 0.3)';
 	context.translate(centerX, centerY);
-	
+
 	resetKeyOffset();
-	
+
 	head.draw(false, false); // draw pie slices
 	head.draw(true, false); // draw labels
-	
+
 	var pathRoot = selectedNode;
-	
+
 	if ( focusNode != 0 && focusNode != selectedNode )
 	{
 		context.globalAlpha = 1;
 		focusNode.drawHighlight(true);
 		pathRoot = focusNode;
 	}
-	
+
 	if
 	(
 		highlightedNode &&
@@ -3953,7 +3954,7 @@ function draw()
 			context.globalAlpha = 1;
 			highlightedNode.drawHighlight(true);
 		}
-		
+
 		//pathRoot = highlightedNode;
 	}
 	else if
@@ -3965,7 +3966,7 @@ function draw()
 		context.globalAlpha = 1;
 		highlightedNode.drawHighlightCenter();
 	}
-	
+
 	if ( quickLook && false) // TEMP
 	{
 		context.globalAlpha = 1 - progress / 2;
@@ -3984,28 +3985,28 @@ function draw()
 			selectedNodeLast.drawHighlight(false);
 		}
 	}
-	
+
 	drawDatasetName();
-	
+
 	//drawHistory();
-	
+
 	context.translate(-centerX, -centerY);
 	context.globalAlpha = 1;
-	
+
 	mapRadius =
 		(imageHeight / 2 - details.clientHeight - details.offsetTop) /
 		(pathRoot.getDepth() - 1) * 3 / 4 / 2;
-	
+
 	if ( mapRadius > maxMapRadius )
 	{
 		mapRadius = maxMapRadius;
 	}
-	
+
 	mapBuffer = mapRadius / 2;
-	
+
 	//context.font = fontNormal;
 	pathRoot.drawMap(pathRoot);
-	
+
 	if ( hueDisplayName && useHue() )
 	{
 		drawLegend();
@@ -4017,13 +4018,13 @@ function drawBubble(angle, radius, width, radial, flip)
 	var height = fontSize * 2;
 	var x;
 	var y;
-	
+
 	width = width + fontSize;
-	
+
 	if ( radial )
 	{
 		y = -fontSize;
-		
+
 		if ( flip )
 		{
 			x = radius - width + fontSize / 2;
@@ -4038,7 +4039,7 @@ function drawBubble(angle, radius, width, radial, flip)
 		x = -width / 2;
 		y = -radius - fontSize;
 	}
-	
+
 	if ( snapshotMode )
 	{
 		drawBubbleSVG(x + centerX, y + centerY, width, height, fontSize, angle);
@@ -4079,18 +4080,18 @@ function drawBubbleSVG(x, y, width, height, radius, rotation)
 function drawDatasetName()
 {
 	var alpha = datasetAlpha.current();
-	
+
 	if ( alpha > 0 )
 	{
 		var radius = gRadius * compressedRadii[0] / -2;
-		
+
 		if ( alpha > 1 )
 		{
 			alpha = 1;
 		}
-		
+
 		context.globalAlpha = alpha;
-		
+
 		drawBubble(0, -radius, datasetWidths[currentDataset], false, false);
 		drawText(datasetNames[currentDataset], 0, radius, 0, 'center', true);
 	}
@@ -4100,10 +4101,10 @@ function drawHistory()
 {
 	var alpha = 1;
 	context.textAlign = 'center';
-	
+
 	for ( var i = 0; i < nodeHistoryPosition && alpha > 0; i++ )
 	{
-		
+
 		context.globalAlpha = alpha - historyAlphaDelta * tweenFactor;
 		context.fillText
 		(
@@ -4111,13 +4112,13 @@ function drawHistory()
 			0,
 			(i + tweenFactor) * historySpacingFactor * fontSize - 1
 		);
-		
+
 		if ( alpha > 0 )
 		{
 			alpha -= historyAlphaDelta;
 		}
 	}
-	
+
 	context.globalAlpha = 1;
 }
 
@@ -4128,22 +4129,22 @@ function drawLegend()
 	var height = imageHeight * .15;
 	var top = imageHeight - fontSize * 3.5 - height;
 	var textLeft = left + width + fontSize / 2;
-	
+
 	context.fillStyle = 'black';
 	context.textAlign = 'start';
 	context.font = fontNormal;
 //	context.fillText(valueStartText, textLeft, top + height);
 //	context.fillText(valueEndText, textLeft, top);
 	context.fillText(hueDisplayName, left, imageHeight - fontSize * 1.5);
-	
+
 	var gradient = context.createLinearGradient(0, top + height, 0, top);
-	
+
 	for ( var i = 0; i < hueStopPositions.length; i++ )
 	{
 		gradient.addColorStop(hueStopPositions[i], hueStopHsl[i]);
-		
+
 		var textY = top + (1 - hueStopPositions[i]) * height;
-		
+
 		if
 		(
 			i == 0 ||
@@ -4154,7 +4155,7 @@ function drawLegend()
 			context.fillText(hueStopText[i], textLeft, textY);
 		}
 	}
-	
+
 	context.fillStyle = gradient;
 	context.fillRect(left, top, width, height);
 	context.lineWidth = thinLineWidth;
@@ -4170,19 +4171,19 @@ function drawLegendSVG()
 	var textLeft = left + width + fontSize / 2;
 
 	var text = '';
-	
+
 	text += svgText(hueDisplayName, left, imageHeight - fontSize * 1.5);
-	
+
 	var svgtest = '<linearGradient id="gradient" x1="0%" y1="100%" x2="0%" y2="0%">';
-	
+
 	for ( var i = 0; i < hueStopPositions.length; i++ )
 	{
 		svgtest +=
 			'<stop offset="' + round(hueStopPositions[i] * 100) +
 			'%" style="stop-color:' + hueStopHsl[i] + '"/>';
-		
+
 		var textY = top + (1 - hueStopPositions[i]) * height;
-		
+
 		if
 		(
 			i == 0 ||
@@ -4193,14 +4194,14 @@ function drawLegendSVG()
 			text += svgText(hueStopText[i], textLeft, textY);
 		}
 	}
-	
+
 	svgtest += '</linearGradient>';
 	//alert(svgtest);
 	svg += svgtest;
 	svg +=
 		'<rect style="fill:url(#gradient)" x="' + left + '" y="' + top +
 		'" width="' + width + '" height="' + height + '"/>';
-	
+
 	svg += text;
 }
 
@@ -4208,25 +4209,25 @@ function drawSearchHighlights(label, bubbleX, bubbleY, rotation, center)
 {
 	var index = -1;
 	var labelLength = label.length;
-	
+
 	bubbleX -= fontSize / 4;
-	
+
 	do
 	{
 		index = label.toLowerCase().indexOf(search.value.toLowerCase(), index + 1);
-		
+
 		if ( index != -1 && index < labelLength )
 		{
 			var dim = context.measureText(label.substr(0, index));
 			var x = bubbleX + dim.width;
-			
+
 			dim = context.measureText(label.substr(index, search.value.length));
-			
+
 			var y = bubbleY - fontSize * 3 / 4;
 			var width = dim.width + fontSize / 2;
 			var height = fontSize * 3 / 2;
 			var radius = fontSize / 2;
-			
+
 			if ( snapshotMode )
 			{
 				if ( center )
@@ -4234,7 +4235,7 @@ function drawSearchHighlights(label, bubbleX, bubbleY, rotation, center)
 					x += centerX;
 					y += centerY;
 				}
-				
+
 				svg +=
 					'<rect x="' + x + '" y="' + y +
 					'" width="' + width +
@@ -4265,7 +4266,7 @@ function drawText(text, x, y, angle, anchor, bold, color)
 	{
 		color = 'black';
 	}
-	
+
 	if ( snapshotMode )
 	{
 		svg +=
@@ -4293,7 +4294,7 @@ function drawTextPolar
 	radius,
 	radial,
 	bubble,
-	bold, 
+	bold,
 	searchResult,
 	searchResults
 )
@@ -4304,7 +4305,7 @@ function drawTextPolar
 	var spacer;
 	var totalText = text;
 	var flip;
-	
+
 	if ( snapshotMode )
 	{
 		spacer = '&#160;&#160;&#160;';
@@ -4313,17 +4314,17 @@ function drawTextPolar
 	{
 		spacer = '   ';
 	}
-	
+
 	if ( radial )
 	{
 		flip = angle < 3 * Math.PI / 2;
-		
+
 		if ( flip )
 		{
 			angle -= Math.PI;
 			radius = -radius;
 			anchor = 'end';
-			
+
 			if ( innerText )
 			{
 				totalText = text + spacer + innerText;
@@ -4332,13 +4333,13 @@ function drawTextPolar
 		else
 		{
 			anchor = 'start';
-			
+
 			if ( innerText )
 			{
 				totalText = innerText + spacer + text;
 			}
 		}
-		
+
 		textX = radius;
 		textY = 0;
 	}
@@ -4346,24 +4347,24 @@ function drawTextPolar
 	{
 		flip = angle < Math.PI || angle > 2 * Math.PI;
 		var label;
-		
+
 		anchor = snapshotMode ? 'middle' : 'center';
-		
+
 		if ( flip )
 		{
 			angle -= Math.PI;
 			radius = -radius;
 		}
-		
+
 		angle += Math.PI / 2;
 		textX = 0;
 		textY = -radius;
 	}
-	
+
 	if ( bubble )
 	{
 		var textActual = totalText;
-		
+
 		if ( innerText && snapshotMode )
 		{
 			if ( flip )
@@ -4375,16 +4376,16 @@ function drawTextPolar
 				textActual = innerText + '   ' + text;
 			}
 		}
-		
+
 		if ( searchResults )
 		{
 			textActual = textActual + searchResultString(searchResults);
 		}
-		
+
 		var textWidth = measureText(textActual, bold);
-		
+
 		var x = textX;
-		
+
 		if ( anchor == 'end' )
 		{
 			x -= textWidth;
@@ -4394,9 +4395,9 @@ function drawTextPolar
 			// centered
 			x -= textWidth / 2;
 		}
-		
+
 		drawBubble(angle, radius, textWidth, radial, flip);
-		
+
 		if ( searchResult )
 		{
 			drawSearchHighlights
@@ -4409,14 +4410,14 @@ function drawTextPolar
 			)
 		}
 	}
-	
+
 	if ( searchResults )
 	{
 		totalText = totalText + searchResultString(searchResults);
 	}
-	
+
 	drawText(totalText, textX, textY, angle, anchor, bold);
-	
+
 	return flip;
 }
 
@@ -4460,7 +4461,7 @@ function drawWedge
 	{
 		return;
 	}
-	
+
 	if ( snapshotMode )
 	{
 		if ( angleEnd == angleStart + Math.PI * 2 )
@@ -4469,21 +4470,21 @@ function drawWedge
 			//
 			angleEnd -= .1 / gRadius;
 		}
-		
+
 		var longArc = angleEnd - angleStart > Math.PI ? 1 : 0;
-		
+
 		var x1 = centerX + radiusInner * Math.cos(angleStart);
 		var y1 = centerY + radiusInner * Math.sin(angleStart);
-		
+
 		var x2 = centerX + gRadius * Math.cos(angleStart);
 		var y2 = centerY + gRadius * Math.sin(angleStart);
-		
+
 		var x3 = centerX + gRadius * Math.cos(angleEnd);
 		var y3 = centerY + gRadius * Math.sin(angleEnd);
-		
+
 		var x4 = centerX + radiusInner * Math.cos(angleEnd);
 		var y4 = centerY + radiusInner * Math.sin(angleEnd);
-		
+
 		var dArray =
 		[
 			" M ", x1, ",", y1,
@@ -4493,11 +4494,11 @@ function drawWedge
 			" A ", radiusInner, ",", radiusInner, " 0 ", longArc, " 0 ", x1, ",", y1,
 			" Z "
 		];
-		
+
 		svg +=
 			'<path class="'+ (highlight ? 'highlight' : 'wedge') + '" fill="' + color +
 			'" d="' + dArray.join('') + '"/>';
-		
+
 		if ( patternAlpha > 0 )
 		{
 			svg +=
@@ -4510,14 +4511,14 @@ function drawWedge
 		// fudge to prevent seams during animation
 		//
 		angleEnd += 1 / gRadius;
-		
+
 		context.fillStyle = color;
 		context.beginPath();
 		context.arc(0, 0, radiusInner, angleStart, angleEnd, false);
 		context.arc(0, 0, radiusOuter, angleEnd, angleStart, true);
 		context.closePath();
 		context.fill();
-		
+
 		if ( patternAlpha > 0 )
 		{
 			context.save();
@@ -4527,7 +4528,7 @@ function drawWedge
 			context.fill();
 			context.restore();
 		}
-		
+
 		if ( highlight )
 		{
 			context.lineWidth = highlight ? highlightLineWidth : thinLineWidth;
@@ -4591,7 +4592,7 @@ function showLink()
 {
 	var urlHalves = String(document.location).split('?');
 	var newGetVariables = new Array();
-	
+
 	newGetVariables.push
 	(
 		getGetString('dataset', currentDataset, false),
@@ -4602,7 +4603,7 @@ function showLink()
 		getGetString('font', fontSize, false),
 		getGetString('key', showKeys, true)
 	);
-	
+
 	hide(linkButton);
 	show(linkText);
 	linkText.value = urlHalves[0] + '?' + getVariables.concat(newGetVariables).join('&');
@@ -4616,12 +4617,12 @@ function showLink()
 function getFirstChild(element)
 {
 	element = element.firstChild;
-	
+
 	if ( element && element.nodeType != 1 )
 	{
 		element = getNextSibling(element);
 	}
-	
+
 	return element;
 }
 
@@ -4632,7 +4633,7 @@ function getNextSibling(element)
 		element = element.nextSibling;
 	}
 	while ( element && element.nodeType != 1 );
-	
+
 	return element;
 }
 
@@ -4646,9 +4647,9 @@ function hslText(hue)
 	if ( 1 || snapshotMode )
 	{
 		// Safari doesn't seem to allow hsl() in SVG
-		
+
 		var rgb = hslToRgb(hue, saturation, (lightnessBase + lightnessMax) / 2);
-		
+
 		return rgbText(rgb.r, rgb.g, rgb.b);
 	}
 	else
@@ -4663,7 +4664,7 @@ function hslText(hue)
 			Math.floor((lightnessBase + lightnessMax) * 50),
 			'%)'
 		];
-		
+
 		return hslArray.join('');
 	}
 }
@@ -4672,7 +4673,7 @@ function hslToRgb(h, s, l)
 {
 	var m1, m2;
 	var r, g, b;
-	
+
 	if (s == 0)
 	{
 		r = g = b = Math.floor((l * 255));
@@ -4687,31 +4688,31 @@ function hslToRgb(h, s, l)
 		{
 			m2 = l + s - l * s;
 		}
-		
+
 		m1 = l * 2 - m2;
-		
+
 		r = Math.floor(hueToRgb(m1, m2, h + 1 / 3));
 		g = Math.floor(hueToRgb(m1, m2, h));
 		b = Math.floor(hueToRgb(m1, m2, h - 1/3));
 	}
-	
+
 	return {r: r, g: g, b: b};
 }
 
 function hueToRgb(m1, m2, hue)
 {
 	var v;
-	
+
 	while (hue < 0)
 	{
 		hue += 1;
 	}
-	
+
 	while (hue > 1)
 	{
 		hue -= 1;
 	}
-	
+
 	if (6 * hue < 1)
 		v = m1 + (m2 - m1) * hue * 6;
 	else if (2 * hue < 1)
@@ -4728,15 +4729,15 @@ function interpolateHue(hueStart, hueEnd, valueStart, valueEnd)
 {
 	// since the gradient will be RGB based, we need to add stops to hit all the
 	// colors in the hue spectrum
-	
+
 	hueStopPositions = new Array();
 	hueStopHsl = new Array();
 	hueStopText = new Array();
-	
+
 	hueStopPositions.push(0);
 	hueStopHsl.push(hslText(hueStart));
 	hueStopText.push(round(valueStart));
-	
+
 	for
 	(
 		var i = (hueStart > hueEnd ? 5 / 6 : 1 / 6);
@@ -4763,7 +4764,7 @@ function interpolateHue(hueStart, hueEnd, valueStart, valueEnd)
 			)));
 		}
 	}
-	
+
 	hueStopPositions.push(1);
 	hueStopHsl.push(hslText(hueEnd));
 	hueStopText.push(round(valueEnd));
@@ -4771,7 +4772,7 @@ function interpolateHue(hueStart, hueEnd, valueStart, valueEnd)
 
 function keyLineAngle(angle, keyAngle, bendRadius, keyX, keyY, pointsX, pointsY)
 {
-	if ( angle < Math.PI / 2 && keyY < bendRadius * Math.sin(angle) 
+	if ( angle < Math.PI / 2 && keyY < bendRadius * Math.sin(angle)
 	|| angle > Math.PI / 2 && keyY < bendRadius)
 	{
 		return Math.asin(keyY / bendRadius);
@@ -4780,20 +4781,20 @@ function keyLineAngle(angle, keyAngle, bendRadius, keyX, keyY, pointsX, pointsY)
 	{
 		// find the angle of the normal to a tangent line that goes to
 		// the label
-		
+
 		var textDist = Math.sqrt
 		(
 			Math.pow(keyX, 2) +
 			Math.pow(keyY, 2)
 		);
-		
+
 		var tanAngle = Math.acos(bendRadius / textDist) + keyAngle;
-		
+
 		if ( angle < tanAngle || angle < Math.PI / 2 )//|| labelLeft < centerX )
 		{
 			// angle doesn't reach far enough for tangent; collapse and
 			// connect directly to label
-			
+
 			if ( keyY / Math.tan(angle) > 0 )
 			{
 				pointsX.push(keyY / Math.tan(angle));
@@ -4804,7 +4805,7 @@ function keyLineAngle(angle, keyAngle, bendRadius, keyX, keyY, pointsX, pointsY)
 				pointsX.push(bendRadius * Math.cos(angle));
 				pointsY.push(bendRadius * Math.sin(angle));
 			}
-			
+
 			return angle;
 		}
 		else
@@ -4839,9 +4840,9 @@ function load()
 	/*console.log("KRONA LOAD()");
 	document.body.style.overflow = "hidden";
 	document.body.style.margin = 0;
-	
+
 	createCanvas();
-	
+
 	if ( context == undefined )
 	{
 		document.body.innerHTML = '\
@@ -4859,12 +4860,12 @@ function load()
 	';
 		return;
 	}
-	
+
 	resize();*/
 	createCanvas();
 
 	var kronaElement = document.getElementsByTagName('krona')[0];
-	
+
 	var magnitudeName;
 	var hueName;
 	var hueDefault;
@@ -4872,17 +4873,17 @@ function load()
 	var hueEnd;
 	var valueStart;
 	var valueEnd;
-	
+
 	if ( kronaElement.getAttribute('collapse') != undefined )
 	{
 		collapse = kronaElement.getAttribute('collapse') == 'true';
 	}
-	
+
 	if ( kronaElement.getAttribute('key') != undefined )
 	{
 		showKeys = kronaElement.getAttribute('key') == 'true';
 	}
-	
+
 	for
 	(
 		var element = getFirstChild(kronaElement);
@@ -4903,28 +4904,28 @@ function load()
 				)
 				{
 					var tag = attributeElement.tagName.toLowerCase();
-					
+
 					if ( tag == 'attribute' )
 					{
 						var attribute = new Attribute();
 						attribute.name = attributeElement.firstChild.nodeValue.toLowerCase();
 						attribute.displayName = attributeElement.getAttribute('display');
-						
+
 						if ( attributeElement.getAttribute('hrefBase') )
 						{
 							attribute.hrefBase = attributeElement.getAttribute('hrefBase');
 						}
-						
+
 						if ( attributeElement.getAttribute('target') )
 						{
 							attribute.target = attributeElement.getAttribute('target');
 						}
-						
+
 						if ( attribute.name == magnitudeName )
 						{
 							magnitudeIndex = attributes.length;
 						}
-						
+
 						if ( attributeElement.getAttribute('listAll') )
 						{
 							attribute.listAll = attributeElement.getAttribute('listAll').toLowerCase();
@@ -4941,28 +4942,28 @@ function load()
 						{
 							attribute.dataNode = attributeElement.getAttribute('dataNode').toLowerCase();
 						}
-						
+
 						if ( attributeElement.getAttribute('postUrl') )
 						{
 							attribute.postUrl = attributeElement.getAttribute('postUrl');
 						}
-						
+
 						if ( attributeElement.getAttribute('postVar') )
 						{
 							attribute.postVar = attributeElement.getAttribute('postVar');
 						}
-						
+
 						if ( attributeElement.getAttribute('mono') )
 						{
 							attribute.mono = true;
 						}
-						
+
 						attributes.push(attribute);
 					}
 					else if ( tag == 'list' )
 					{
 						var attribute = new Attribute();
-						
+
 						attribute.name = attributeElement.firstChild.nodeValue;
 						attribute.list = true;
 						attributes.push(attribute);
@@ -4970,11 +4971,11 @@ function load()
 					else if ( tag == 'data' )
 					{
 						var attribute = new Attribute();
-						
+
 						attribute.name = attributeElement.firstChild.nodeValue;
 						attribute.data = true;
 						attributes.push(attribute);
-						
+
 						var enableScript = document.createElement('script');
 						var date = new Date();
 						enableScript.src =
@@ -4984,7 +4985,7 @@ function load()
 					}
 				}
 				break;
-			
+
 			case 'color':
 				hueName = element.getAttribute('attribute');
 				hueStart = Number(element.getAttribute('hueStart')) / 360;
@@ -4999,7 +5000,7 @@ function load()
 					hueDefault = true;
 				}
 				break;
-			
+
 			case 'datasets':
 				datasetNames = new Array();
 				//
@@ -5009,7 +5010,7 @@ function load()
 				}
 				datasets = datasetNames.length;
 				break;
-			
+
 			case 'node':
 				head = loadTreeDOM
 				(
@@ -5024,7 +5025,7 @@ function load()
 				break;
 		}
 	}
-	
+
 	// get GET options
 	//
 	var urlHalves = String(document.location).split('?');
@@ -5035,55 +5036,55 @@ function load()
 	if ( urlHalves[1] )
 	{
 		var vars = urlHalves[1].split('&');
-		
+
 		for ( i = 0; i < vars.length; i++ )
 		{
 			var pair = vars[i].split('=');
-			
+
 			switch ( pair[0] )
 			{
 				case 'collapse':
 					collapse = pair[1] == 'true';
 					break;
-				
+
 				case 'color':
 					hueDefault = pair[1] == 'true';
 					break;
-				
+
 				case 'dataset':
 					datasetDefault = Number(pair[1]);
 					break;
-					
+
 				case 'depth':
 					maxDepthDefault = Number(pair[1]) + 1;
 					break;
-				
+
 				case 'key':
 					showKeys = pair[1] == 'true';
 					break;
-				
+
 				case 'font':
 					fontSize = Number(pair[1]);
 					break;
-				
+
 				case 'node':
 					nodeDefault = Number(pair[1]);
 					break;
-				
+
 				default:
 					getVariables.push(pair[0] + '=' + pair[1]);
 					break;
 			}
 		}
 	}
-	
+
 	addOptionElements(hueName, hueDefault);
 	setCallBacks();
-	
+
 	head.sort();
 	maxAbsoluteDepth = 0;
 	selectDataset(datasetDefault);
-	
+
 	if ( maxDepthDefault && maxDepthDefault < head.maxDepth )
 	{
 		maxAbsoluteDepth = maxDepthDefault;
@@ -5092,11 +5093,11 @@ function load()
 	{
 		maxAbsoluteDepth = head.maxDepth;
 	}
-	
+
 	selectNode(nodes[nodeDefault]);
-	
+
 	setInterval(update, 20);
-	
+
 	window.onresize = handleResize;
 	updateMaxAbsoluteDepth();
 	updateViewNeeded = true;
@@ -5114,24 +5115,24 @@ function loadTreeDOM
 )
 {
 	var newNode = new Node();
-	
+
 	newNode.name = domNode.getAttribute('name');
-	
+
 	if ( domNode.getAttribute('href') )
 	{
 		newNode.href = domNode.getAttribute('href');
 	}
-	
+
 	if ( hueName )
 	{
 		newNode.hues = new Array();
 	}
-	
+
 	for ( var i = getFirstChild(domNode); i; i = getNextSibling(i) )
 	{
 		switch ( i.tagName.toLowerCase() )
 		{
-		case 'node': 
+		case 'node':
 			var newChild = loadTreeDOM
 			(
 				i,
@@ -5145,7 +5146,7 @@ function loadTreeDOM
 			newChild.parent = newNode;
 			newNode.children.push(newChild);
 			break;
-			
+
 		default:
 			var attributeName = i.tagName.toLowerCase();
 			var index = attributeIndex(attributeName);
@@ -5161,7 +5162,7 @@ function loadTreeDOM
 				if ( attributes[index].list )
 				{
 					newNode.attributes[index].push(new Array());
-					
+
 					for ( var k = getFirstChild(j); k; k = getNextSibling(k) )
 					{
 						newNode.attributes[index][newNode.attributes[index].length - 1].push(k.firstChild.nodeValue);
@@ -5170,19 +5171,19 @@ function loadTreeDOM
 				else
 				{
 					var value = j.firstChild ? j.firstChild.nodeValue : '';
-					
+
 					if ( j.getAttribute('href') )
 					{
 						var target;
-						
+
 						if ( attributes[index].target )
 						{
 							target = ' target="' + attributes[index].target + '"';
 						}
-						
+
 						value = '<a href="' + attributes[index].hrefBase + j.getAttribute('href') + '"' + target + '>' + value + '</a>';
 					}
-					
+
 					newNode.attributes[index].push(value);
 				}
 			}
@@ -5192,9 +5193,9 @@ function loadTreeDOM
 				for ( j = 0; j < datasets; j++ )
 				{
 					var value = newNode.attributes[index][j] == undefined ? 0 : Number(newNode.attributes[index][j]);
-					
+
 					newNode.attributes[index][j] = value;
-					
+
 					if ( attributeName == hueName )
 					{
 						var hue = lerp
@@ -5205,7 +5206,7 @@ function loadTreeDOM
 							hueStart,
 							hueEnd
 						);
-						
+
 						if ( hue < hueStart == hueStart < hueEnd )
 						{
 							hue = hueStart;
@@ -5214,11 +5215,11 @@ function loadTreeDOM
 						{
 							hue = hueEnd;
 						}
-						
+
 						newNode.hues[j] = hue;
 					}
 				}
-				
+
 				if ( attributeName == hueName )
 				{
 					newNode.hue = new Tween(newNode.hues[0], newNode.hues[0]);
@@ -5227,7 +5228,7 @@ function loadTreeDOM
 			break;
 		}
 	}
-	
+
 	return newNode;
 }
 
@@ -5268,7 +5269,7 @@ function minWidth()
 	// Min wedge width (at center) for displaying a node (or for displaying a
 	// label if it's at the highest level being viewed, multiplied by 2 to make
 	// further calculations simpler
-	
+
 	return (fontSize * 2.3);
 }
 
@@ -5278,7 +5279,7 @@ function mouseMove(e)
 	mouseY = e.pageY - headerHeight;
 	mouseXRel = (mouseX - centerX) * backingScale()
 	mouseYRel = (mouseY - centerY) * backingScale()
-	
+
 	if ( head && ! quickLook )
 	{
 		checkHighlight();
@@ -5313,7 +5314,7 @@ function mouseUp(e)
 		navigateBack();
 		quickLook = false;
 	}
-	
+
 	mouseDown = false;
 }
 
@@ -5323,12 +5324,12 @@ function navigateBack()
 	{
 		nodeHistory[nodeHistoryPosition] = selectedNode;
 		nodeHistoryPosition--;
-		
+
 		if ( nodeHistory[nodeHistoryPosition].collapse )
 		{
 			collapseCheckBox.checked = collapse = false;
 		}
-		
+
 		setSelectedNode(nodeHistory[nodeHistoryPosition]);
 		updateDatasetButtons();
 		updateView();
@@ -5350,19 +5351,19 @@ function navigateForward()
 	{
 		nodeHistoryPosition++;
 		var newNode = nodeHistory[nodeHistoryPosition];
-		
+
 		if ( newNode.collapse )
 		{
 			collapseCheckBox.checked = collapse = false;
 		}
-		
+
 		if ( nodeHistoryPosition == nodeHistory.length - 1 )
 		{
 			// this will ensure the forward button is disabled
-			
+
 			nodeHistory.length = nodeHistoryPosition;
 		}
-		
+
 		setSelectedNode(newNode);
 		updateDatasetButtons();
 		updateView();
@@ -5372,7 +5373,7 @@ function navigateForward()
 function nextDataset()
 {
 	var newDataset = currentDataset;
-	
+
 	do
 	{
 		if ( newDataset == datasets - 1 )
@@ -5385,7 +5386,7 @@ function nextDataset()
 		}
 	}
 	while ( datasetDropDown.options[newDataset].disabled )
-	
+
 	selectDataset(newDataset);
 }
 
@@ -5419,7 +5420,7 @@ function onKeyDown(event)
 	else if ( event.keyCode == 38 && datasets > 1 )
 	{
 		prevDataset();
-		
+
 		//if ( document.activeElement.id == 'datasets' )
 		{
 			event.preventDefault();
@@ -5428,7 +5429,7 @@ function onKeyDown(event)
 	else if ( event.keyCode == 40 && datasets > 1 )
 	{
 		nextDataset();
-		
+
 		//if ( document.activeElement.id == 'datasets' )
 		{
 			event.preventDefault();
@@ -5458,7 +5459,7 @@ function onKeyPress(event)
 	if ( event.keyCode == 38 && datasets > 1 )
 	{
 //		prevDataset();
-		
+
 		//if ( document.activeElement.id == 'datasets' )
 		{
 			event.preventDefault();
@@ -5467,7 +5468,7 @@ function onKeyPress(event)
 	else if ( event.keyCode == 40 && datasets > 1 )
 	{
 //		nextDataset();
-		
+
 		//if ( document.activeElement.id == 'datasets' )
 		{
 			event.preventDefault();
@@ -5485,7 +5486,7 @@ function onKeyUp(event)
 	else if ( event.keyCode == 38 && datasets > 1 )
 	{
 //		prevDataset();
-		
+
 		//if ( document.activeElement.id == 'datasets' )
 		{
 			event.preventDefault();
@@ -5494,7 +5495,7 @@ function onKeyUp(event)
 	else if ( event.keyCode == 40 && datasets > 1 )
 	{
 //		nextDataset();
-		
+
 		//if ( document.activeElement.id == 'datasets' )
 		{
 			event.preventDefault();
@@ -5506,7 +5507,7 @@ function onSearchChange()
 {
 	nSearchResults = 0;
 	head.search();
-	
+
 	if ( search.value == '' )
 	{
 		searchResults.innerHTML = '';
@@ -5515,7 +5516,7 @@ function onSearchChange()
 	{
 		searchResults.innerHTML = nSearchResults + ' results';
 	}
-	
+
 	setFocus(selectedNode);
 	draw();
 }
@@ -5525,27 +5526,27 @@ function post(url, variable, value, postWindow)
 	var form = document.createElement('form');
 	var input = document.createElement('input');
 	var inputDataset = document.createElement('input');
-	
+
 	form.appendChild(input);
 	form.appendChild(inputDataset);
-	
+
 	form.method = "POST";
 	form.action = url;
-	
+
 	if ( postWindow == undefined )
 	{
 		form.target = '_blank';
 		postWindow = window;
 	}
-	
+
 	input.type = 'hidden';
 	input.name = variable;
 	input.value = value;
-	
+
 	inputDataset.type = 'hidden';
 	inputDataset.name = 'dataset';
 	inputDataset.value = currentDataset;
-	
+
 	postWindow.document.body.appendChild(form);
 	form.submit();
 }
@@ -5553,7 +5554,7 @@ function post(url, variable, value, postWindow)
 function prevDataset()
 {
 	var newDataset = currentDataset;
-	
+
 	do
 	{
 		if ( newDataset == 0 )
@@ -5566,7 +5567,7 @@ function prevDataset()
 		}
 	}
 	while ( datasetDropDown.options[newDataset].disabled );
-	
+
 	selectDataset(newDataset);
 }
 
@@ -5607,7 +5608,7 @@ function rgbText(r, g, b)
 		Math.floor(b),
 		")"
 	];
-	
+
 	return rgbArray.join('');
 }
 
@@ -5629,12 +5630,12 @@ function roundedRectangle(x, y, width, height, radius)
 	{
 		radius = width / 2;
 	}
-	
+
 	if ( radius * 2 > height )
 	{
 		radius = height / 2;
 	}
-	
+
 	context.beginPath();
 	context.arc(x + radius, y + radius, radius, Math.PI, Math.PI * 3 / 2, false);
 	context.lineTo(x + width - radius, y);
@@ -5654,13 +5655,13 @@ function passClick(e)
 function searchResultString(results)
 {
 	var searchResults = this.searchResults;
-	
+
 	if ( this.isSearchResult )
 	{
 		// don't count ourselves
 		searchResults--;
 	}
-	
+
 	return ' - ' + results + (results > 1 ? ' results' : ' result');
 }
 
@@ -5739,9 +5740,9 @@ function setCallBacks()
 		var lastDatasetButton = document.getElementById('lastDataset');
 		lastDatasetButton.onmousedown = suppressEvent;
 	}
-	
+
 	image = document.getElementById('hiddenImage');
-	
+
 	/*if ( image.complete )
 	{
 		hiddenPattern = context.createPattern(image, 'repeat');
@@ -5753,9 +5754,9 @@ function setCallBacks()
 			hiddenPattern = context.createPattern(image, 'repeat');
 		}
 	}*/
-	
+
 	var loadingImageElement = document.getElementById('loadingImage');
-	
+
 	if ( loadingImageElement )
 	{
 		loadingImage = loadingImageElement.src;
@@ -5792,17 +5793,17 @@ function selectNode(newNode)
 		// truncate history at current location to create a new branch
 		//
 		nodeHistory.length = nodeHistoryPosition;
-		
+
 		if ( selectedNode != 0 )
 		{
 			nodeHistory.push(selectedNode);
 			nodeHistoryPosition++;
 		}
-		
+
 		setSelectedNode(newNode);
 		//updateView();
 	}
-	
+
 	updateDatasetButtons();
 }
 
@@ -5812,9 +5813,9 @@ function setFocus(node)
 	{
 //		return;
 	}
-	
+
 	focusNode = node;
-	
+
 	if ( node.href )
 	{
 		detailsName.innerHTML =
@@ -5824,21 +5825,21 @@ function setFocus(node)
 	{
 		detailsName.innerHTML = node.name;
 	}
-	
+
 	var table = '<table>';
-	
+
 	table += '<tr><td></td></tr>';
-	
+
 	for ( var i = 0; i < node.attributes.length; i++ )
 	{
 		if ( attributes[i].displayName && node.attributes[i] != undefined )
 		{
 			var index = node.attributes[i].length == 1 && attributes[i].mono ? 0 : currentDataset;
-			
+
 			if ( typeof node.attributes[i][currentDataset] == 'number' || node.attributes[i][index] != undefined && node.attributes[i][currentDataset] != '' )
 			{
 				var value = node.attributes[i][index];
-				
+
 				if ( attributes[i].listNode != undefined )
 				{
 					value =
@@ -5871,17 +5872,17 @@ function setFocus(node)
 						',true);return false;" title="Show data">' +
 						value + '</a>';
 				}
-				
+
 				table +=
 					'<tr><td><strong>' + attributes[i].displayName + ':</strong></td><td>' +
 					value + '</td></tr>';
 			}
 		}
 	}
-	
+
 	table += '</table>';
 	detailsInfo.innerHTML = table;
-	
+
 	detailsExpand.disabled = !focusNode.hasChildren() || focusNode == selectedNode;
 }
 
@@ -5895,10 +5896,10 @@ function setSelectedNode(newNode)
 	{
 		zoomOut = false;
 	}
-	
+
 	selectedNodeLast = selectedNode;
 	selectedNode = newNode;
-	
+
 	//if ( focusNode != selectedNode )
 	{
 		setFocus(selectedNode);
@@ -5915,31 +5916,31 @@ function waitForData(dataWindow, target, title, time, postUrl, postVar)
 			{
 				nodeData[i] = nodeData[i].replace(/\n/g, ',');
 			}
-			
+
 			var postString = nodeData.join('');
 			postString = postString.slice(0, -1);
-			
+
 			dataWindow.document.body.removeChild(dataWindow.document.getElementById('loading'));
 			document.body.removeChild(document.getElementById('data'));
-			
+
 			post(postUrl, postVar, postString, dataWindow);
 		}
 		else
 		{
 			//dataWindow.document.body.removeChild(dataWindow.document.getElementById('loading'));
 			//document.body.removeChild(document.getElementById('data'));
-			
+
 			dataWindow.document.open();
 			dataWindow.document.write('<pre>' + nodeData.join('') + '</pre>');
 			dataWindow.document.close();
 		}
-		
+
 		dataWindow.document.title = title; // replace after document.write()
 	}
 	else
 	{
 		var date = new Date();
-		
+
 		if ( date.getTime() - time > 10000 )
 		{
 			dataWindow.document.body.removeChild(dataWindow.document.getElementById('loading'));
@@ -5969,9 +5970,9 @@ function showData(indexData, indexAttribute, summary)
 	//var dataWindow = window.open('', '_blank');
 	var title = 'Krona - ' + attributes[indexAttribute].displayName + ' - ' + focusNode.name;
 	dataWindow.document.title = title;
-	
+
 	nodeData = new Array();
-	
+
 	//if ( dataWindow && dataWindow.document && dataWindow.document.body != null )
 	//{
 		//var loadImage = document.createElement('img');
@@ -5984,32 +5985,32 @@ function showData(indexData, indexAttribute, summary)
 		document.body.innerHTML =
 			'<img id="loading" src="' + loadingImage + '" alt="Loading..."></img>';
 	//}
-	
+
 	var scripts = document.createElement('div');
 	scripts.id = 'data';
 	document.body.appendChild(scripts);
-	
+
 	var files = focusNode.getData(indexData, summary);
-	
+
 	var date = new Date();
 	var time = date.getTime();
-	
+
 	for ( var i = 0; i < files.length; i++ )
 	{
 		var script = document.createElement('script');
 		script.src = files[i] + '?' + time;
 		scripts.appendChild(script);
 	}
-	
+
 	waitForData(dataWindow, files.length, title, time, attributes[indexAttribute].postUrl, attributes[indexAttribute].postVar);
-	
+
 	return false;
 }
 
 function showList(indexList, indexAttribute, summary)
 {
 	var list = focusNode.getList(indexList, summary);
-	
+
 	if ( attributes[indexAttribute].postUrl != undefined )
 	{
 		post(attributes[indexAttribute].postUrl, attributes[indexAttribute].postVar, list.join(','));
@@ -6017,7 +6018,7 @@ function showList(indexList, indexAttribute, summary)
 	else
 	{
 		var dataWindow = window.open('', '_blank');
-		
+
 		if ( true || navigator.appName == 'Microsoft Internet Explorer' ) // :(
 		{
 			dataWindow.document.open();
@@ -6030,7 +6031,7 @@ function showList(indexList, indexAttribute, summary)
 			dataWindow.document.body.appendChild(pre);
 			pre.innerHTML = list;
 		}
-		
+
 		dataWindow.document.title = 'Krona - ' + attributes[indexAttribute].displayName + ' - ' + focusNode.name;
 	}
 }
@@ -6038,29 +6039,29 @@ function showList(indexList, indexAttribute, summary)
 function snapshot()
 {
 	svg = svgHeader();
-	
+
 	resetKeyOffset();
-	
+
 	snapshotMode = true;
-	
+
 	selectedNode.draw(false, true);
 	selectedNode.draw(true, true);
-	
+
 	if ( focusNode != 0 && focusNode != selectedNode )
 	{
 		context.globalAlpha = 1;
 		focusNode.drawHighlight(true);
 	}
-	
+
 	if ( hueDisplayName && useHue() )
 	{
 		drawLegendSVG();
 	}
-	
+
 	snapshotMode = false;
-	
+
 	svg += svgFooter();
-	
+
 	snapshotWindow = window.open
 	(
 		'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg),
@@ -6078,7 +6079,7 @@ function snapshot()
 	data.document.body.appendChild(button);
 //	snapshotWindow.document.write(svg);
 //	snapshotWindow.document.close();
-*/	
+*/
 }
 
 function save()
@@ -6112,7 +6113,7 @@ function svgFooter()
 function svgHeader()
 {
 	var patternWidth = fontSize * .6;//radius / 50;
-	
+
 	return '\
 <?xml version="1.0" standalone="no"?>\
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" \
@@ -6152,12 +6153,12 @@ function svgText(text, x, y, anchor, bold, color)
 	{
 		anchor = 'start';
 	}
-	
+
 	if ( color == undefined )
 	{
 		color = 'black';
 	}
-	
+
 	return '<text x="' + x + '" y="' + y +
 		'" style="font-color:' + color + ';font-weight:' + (bold ? 'bold' : 'normal') +
 		'" text-anchor="' + anchor + '">' + text + '</text>';
@@ -6175,9 +6176,9 @@ function toggleKeys()
 		keyControl.value = 'x';
 		showKeys = true;
 	}
-	
+
 	updateKeyControl();
-	
+
 	if ( progress == 1 )
 	{
 		draw();
@@ -6190,11 +6191,11 @@ function update()
 	{
 		return;
 	}
-	
+
 	if ( mouseDown && focusNode != selectedNode )
 	{
 		var date = new Date();
-		
+
 		if ( date.getTime() - mouseDownTime > quickLookHoldLength )
 		{
 			if ( focusNode.hasChildren() )
@@ -6204,20 +6205,20 @@ function update()
 			}
 		}
 	}
-	
+
 	if ( updateViewNeeded )
 	{
 		resize();
 		mouseX = -1;
 		mouseY = -1;
-		
+
 		collapse = collapseCheckBox.checked;
 		compress = true;//compressCheckBox.checked;
 		shorten = true;//shortenCheckBox.checked;
-		
+
 		checkSelectedCollapse();
 		updateMaxAbsoluteDepth();
-		
+
 		if ( focusNode.getCollapse() || focusNode.depth > maxAbsoluteDepth )
 		{
 			setFocus(selectedNode);
@@ -6226,49 +6227,49 @@ function update()
 		{
 			setFocus(focusNode);
 		}
-		
+
 		updateView();
-		
+
 		updateViewNeeded = false;
 	}
-	
+
 	var date = new Date();
 	progress = (date.getTime() - tweenStartTime) / tweenLength;
 //	progress += .01;
-	
+
 	if ( progress >= 1 )
 	{
 		progress = 1;
 	}
-	
+
 	if ( progress != progressLast )
 	{
 		tweenFactor =// progress;
 			(1 / (1 + Math.exp(-tweenCurvature * (progress - .5))) - .5) /
 			(tweenMax - .5) / 2 + .5;
-		
+
 		if ( progress == 1 )
 		{
 			snapshotButton.disabled = false;
 			zoomOut = false;
-			
+
 			//updateKeyControl();
-			
+
 			if ( ! quickLook )
 			{
 				//checkHighlight();
 			}
-			
-			
+
+
 			if ( fpsDisplay )
 			{
 				fpsDisplay.innerHTML = 'fps: ' + Math.round(tweenFrames * 1000 / tweenLength);
 			}
 		}
-		
+
 		draw();
 	}
-	
+
 	progressLast = progress;
 }
 
@@ -6278,21 +6279,21 @@ function updateDatasetButtons()
 	{
 		return;
 	}
-	
+
 	var node = selectedNode ? selectedNode : head;
-	
+
 	datasetButtonLast.disabled =
 		node.attributes[magnitudeIndex][lastDataset] == 0;
-	
+
 	datasetButtonPrev.disabled = true;
 	datasetButtonNext.disabled = true;
-	
+
 	for ( var i = 0; i < datasets; i++ )
 	{
 		var disable = node.attributes[magnitudeIndex][i] == 0;
-		
+
 		datasetDropDown.options[i].disabled = disable;
-		
+
 		if ( ! disable )
 		{
 			if ( i != currentDataset )
@@ -6327,7 +6328,7 @@ function updateKeyControl()
 	{
 		keyControl.style.visibility = 'visible';
 		keyControl.style.right = margin + 'px';
-		
+
 		if ( showKeys )
 		{
 			keyControl.style.top =
@@ -6353,37 +6354,37 @@ function updateView()
 	{
 		maxAbsoluteDepth = selectedNode.depth + 1;
 	}
-	
+
 	highlightedNode = selectedNode;
-	
+
 	angleFactor = 2 * Math.PI / (selectedNode.magnitude);
-	
+
 	maxPossibleDepth = Math.floor(gRadius / (fontSize * minRingWidthFactor));
-	
+
 	if ( maxPossibleDepth < 4 )
 	{
 		maxPossibleDepth = 4;
 	}
-	
+
 	var minRadiusInner = fontSize * 8 / gRadius;
 	var minRadiusFirst = fontSize * 6 / gRadius;
 	var minRadiusOuter = fontSize * 5 / gRadius;
-	
+
 	if ( .25 < minRadiusInner )
 	{
 		minRadiusInner = .25;
 	}
-	
+
 	if ( .15 < minRadiusFirst )
 	{
 		minRadiusFirst = .15;
 	}
-	
+
 	if ( .15 < minRadiusOuter )
 	{
 		minRadiusOuter = .15;
 	}
-	
+
 	// visibility of nodes depends on the depth they are displayed at,
 	// so we need to set the max depth assuming they can all be displayed
 	// and iterate it down based on the deepest child node we can display
@@ -6394,20 +6395,20 @@ function updateView()
 	do
 	{
 		maxDepth = newMaxDepth;
-		
+
 		if ( ! compress && maxDepth > maxPossibleDepth )
 		{
 			maxDepth = maxPossibleDepth;
 		}
-		
+
 		if ( compress )
 		{
 			compressedRadii = new Array(maxDepth);
-			
+
 			compressedRadii[0] = minRadiusInner;
-			
+
 			var offset = 0;
-			
+
 			while
 			(
 				lerp
@@ -6423,9 +6424,9 @@ function updateView()
 			{
 				offset++;
 			}
-			
+
 			offset--;
-			
+
 			for ( var i = 1; i < maxDepth; i++ )
 			{
 				compressedRadii[i] = lerp
@@ -6442,9 +6443,9 @@ function updateView()
 		{
 			nodeRadius = 1 / maxDepth;
 		}
-		
+
 		newMaxDepth = selectedNode.maxVisibleDepth(maxDepth);
-		
+
 		if ( compress )
 		{
 			if ( newMaxDepth <= maxPossibleDepth )
@@ -6461,17 +6462,17 @@ function updateView()
 		}
 	}
 	while ( newMaxDepth < maxDepth );
-	
+
 	maxDisplayDepth = maxDepth;
-	
+
 	lightnessFactor = (lightnessMax - lightnessBase) / (maxDepth > 8 ? 8 : maxDepth);
 	keys = 0;
-	
+
 	nLabelOffsets = new Array(maxDisplayDepth - 1);
 	labelOffsets = new Array(maxDisplayDepth - 1);
 	labelLastNodes = new Array(maxDisplayDepth - 1);
 	labelFirstNodes = new Array(maxDisplayDepth - 1);
-	
+
 	for ( var i = 0; i < maxDisplayDepth - 1; i++ )
 	{
 		if ( compress )
@@ -6485,9 +6486,9 @@ function updateView()
 				var width =
 					(compressedRadii[i + 1] - compressedRadii[i]) *
 					gRadius;
-				
+
 				nLabelOffsets[i] = Math.floor(width / fontSize / 1.2);
-				
+
 				if ( nLabelOffsets[i] > 2 )
 				{
 					nLabelOffsets[i] = min
@@ -6506,40 +6507,40 @@ function updateView()
 				3
 			);
 		}
-		
+
 		labelOffsets[i] = Math.floor((nLabelOffsets[i] - 1) / 2);
 		labelLastNodes[i] = new Array(nLabelOffsets[i] + 1);
 		labelFirstNodes[i] = new Array(nLabelOffsets[i] + 1);
-		
+
 		for ( var j = 0; j <= nLabelOffsets[i]; j++ )
 		{
 			// these arrays will allow nodes with neighboring labels to link to
 			// each other to determine max label length
-			
+
 			labelLastNodes[i][j] = 0;
 			labelFirstNodes[i][j] = 0;
 		}
 	}
-	
+
 	fontSizeText.innerHTML = fontSize;
 	fontNormal = fontSize + 'px ' + fontFamily;
 	context.font = fontNormal;
 	fontBold = 'bold ' + fontSize + 'px ' + fontFamily;
 	tickLength = fontSize * .7;
-	
+
 	head.setTargets(0);
-	
+
 	keySize = ((imageHeight - margin * 3) * 1 / 2) / keys * 3 / 4;
-	
+
 	if ( keySize > fontSize * maxKeySizeFactor )
 	{
 		keySize = fontSize * maxKeySizeFactor;
 	}
-	
+
 	keyBuffer = keySize / 3;
-	
+
 	fontSizeLast = fontSize;
-	
+
 	if ( datasetChanged )
 	{
 		datasetChanged = false;
@@ -6548,24 +6549,24 @@ function updateView()
 	{
 		datasetAlpha.start = 0;
 	}
-	
+
 	var date = new Date();
 	tweenStartTime = date.getTime();
 	progress = 0;
 	tweenFrames = 0;
-	
+
 	updateKeyControl();
 	updateDatasetWidths();
-	
+
 	document.title = 'Krona - ' + selectedNode.name;
 	updateNavigationButtons();
 	snapshotButton.disabled = true;
-	
+
 	maxAbsoluteDepthText.innerHTML = maxAbsoluteDepth - 1;
-	
+
 	maxAbsoluteDepthButtonDecrease.disabled = (maxAbsoluteDepth == 2);
 	maxAbsoluteDepthButtonIncrease.disabled = (maxAbsoluteDepth == head.maxDepth);
-	
+
 	if ( collapse != collapseLast && search.value != '' )
 	{
 		onSearchChange();
