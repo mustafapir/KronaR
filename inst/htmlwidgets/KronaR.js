@@ -13,7 +13,7 @@ HTMLWidgets.widget({
       renderValue: function(x) {
 
         // TODO: code to render the widget, e.g.
-        // initialise the page
+        el.style = "padding:0;position:relative;width:800px;height:600px;"; // Set your desired width and height
         while (el.firstChild) {
             el.removeChild(el.firstChild);
         }
@@ -22,8 +22,7 @@ HTMLWidgets.widget({
         //el.innerText = x.message;
         var dataKrona =  x.message;
         var conditions = x.conditions;
-        var body = document.body;
-        body.style = "padding:0;position:relative";
+        el.style = "padding:0;position:relative";
 
         //body.setAttribute("onload","addData()");
 
@@ -33,14 +32,14 @@ HTMLWidgets.widget({
         var img = document.createElement("img");
           img.setAttribute( "id","hiddenImage");
           img.setAttribute( "visibility","hide");
-          document.body.appendChild(img);
+          el.appendChild(img);
 
          var divdetails = document.createElement("details");
           divdetails.setAttribute( "style","position:absolute;top:1%;right:2%;text-align:right;");
-          document.body.appendChild(divdetails);
+          el.appendChild(divdetails);
           var divoptions = document.createElement("options");
           divoptions.setAttribute( "style","position:absolute;left:0;top:0");
-          document.body.appendChild(divoptions);
+          el.appendChild(divoptions);
     //<script name='tree' src='http://krona.sourceforge.net/krona-1.1.js'></script>"
             //document.get
         //canvas.setAttribute( "style","width:"+width+";height:"+height);
@@ -109,6 +108,12 @@ HTMLWidgets.widget({
           div.appendChild(datel);
           document.body.appendChild(div);
 
+          // Place the Krona element inside the widget container
+          var div = document.createElement("div");
+          div.setAttribute("style", "width:100%; height:100%; overflow:hidden;");  // Ensure the fixed size is maintained
+          div.appendChild(datel);
+          el.appendChild(div);
+
           load();
           // document.body.appendChild(scriptKrona);
         }
@@ -122,31 +127,9 @@ HTMLWidgets.widget({
 
       resize: function(width, height) {
 
-        // TODO: code to re-render the widget with a new size
-        // Remove all existing children (if any) to reset the widget content
-        while (el.firstChild) {
-            el.removeChild(el.firstChild);
-        }
-
-        // Create a new container or adjust the existing elements' size based on the new width and height
-        var newDiv = document.createElement("div");
-        newDiv.setAttribute("style", "width:" + width + "px; height:" + height + "px; position: relative;");
-
-        // Add back any necessary elements or widgets with the adjusted size
-        // In this case, we assume the core element is a Krona element, adjust if needed
-        var datel = document.createElement("Krona");
-        datel.setAttribute("collapse", "true");
-        datel.setAttribute("key", "true");
-
-        // Re-add content, perhaps from previously stored data
-        datel.innerHTML = x.data + dataKrona;
-
-        // Append the resized widget to the container
-        newDiv.appendChild(datel);
-        el.appendChild(newDiv);
-
-        // Optionally re-trigger any necessary re-initialization or redraw logic
-        load();
+        // Keep the fixed size even on resize
+        el.style.width = "800px";  // Fixed width
+        el.style.height = "600px"; // Fixed height
       }
 
     };
