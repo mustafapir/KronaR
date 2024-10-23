@@ -58,7 +58,7 @@ You can also use the **KronaR** function within [R Markdown](http://rmarkdown.rs
 
 ```r
 
-library(KronaR)
+library(KronaR2)
 library(shiny)
 importT <-system.file("src/text.txt",package = "KronaR")
 dat <-read.csv(importT,header = T, sep = "\t")
