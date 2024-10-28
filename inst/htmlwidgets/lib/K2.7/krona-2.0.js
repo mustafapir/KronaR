@@ -1,3 +1,4 @@
+
 {//-----------------------------------------------------------------------------
 //
 // PURPOSE
@@ -308,13 +309,13 @@ function backingScale()
 
 function resize()
 {
-	imageWidth = 600;  // Define desired width
-  imageHeight = 400; // Define desired height
+	imageWidth = window.innerWidth;
+	imageHeight = window.innerHeight;
 
 	if ( ! snapshotMode )
 	{
-		context.canvas.width = imageWidth //* backingScale();
-		context.canvas.height = imageHeight //* backingScale();
+		context.canvas.width = imageWidth * backingScale();
+		context.canvas.height = imageHeight * backingScale();
 		context.canvas.style.width = imageWidth + "px"
 		context.canvas.style.height = imageHeight + "px"
 		context.scale(backingScale(), backingScale());
@@ -344,9 +345,9 @@ function resize()
 	maxMapRadius = minDimension * .03;
 	buffer = minDimension * bufferFactor;
 	margin = minDimension * .015;
-	centerX = imageWidth / 2;
-  centerY = imageHeight / 2;
-  gRadius = Math.min(imageWidth, imageHeight) / 2 - buffer;
+	centerX = (imageWidth - mapWidth - leftMargin) / 2 + leftMargin;
+	centerY = imageHeight / 2;
+	gRadius = minDimension / 2 - buffer;
 	//context.font = '11px sans-serif';
 }
 
