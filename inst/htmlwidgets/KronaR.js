@@ -1,55 +1,45 @@
 HTMLWidgets.widget({
+
   name: 'KronaR',
+
   type: 'output',
+
   factory: function(el, width, height) {
+
     return {
+
       renderValue: function(x) {
+        // Clear previous contents
         while (el.firstChild) {
           el.removeChild(el.firstChild);
         }
 
-        console.log(x.data);
+        // Set size constraints for the widget container element (el)
+        el.style.width = '600px';  // Set desired width
+        el.style.height = '400px'; // Set desired height
+        el.style.position = 'relative';
+        el.style.overflow = 'hidden';  // Hide overflow if needed
+
         var dataKrona = x.message;
 
-        var divdetails = document.createElement("details");
-        divdetails.setAttribute("style", "position:absolute;top:1%;right:2%;text-align:right;");
-        el.appendChild(divdetails);
+        // Set up Krona data and load it in the `el` container
+        var datel = document.createElement("Krona");
+        datel.setAttribute("collapse", "true");
+        datel.setAttribute("key", "true");
+        datel.innerHTML = dataKrona;
 
-        var divoptions = document.createElement("options");
-        divoptions.setAttribute("style", "position:absolute;left:0;top:0");
-        el.appendChild(divoptions);
+        var div = document.createElement("div");
+        div.setAttribute("style", "display:none");
+        div.appendChild(datel);
 
-        function addData() {
-          console.log("redraw");
-          var data = "<attributes magnitude='magnitude'>\
-                        <attribute display='Total'>magnitude</attribute>\
-                        <attribute display='Unassigned'>magnitudeUnassigned</attribute>\
-                      </attributes>\
-                      <datasets>\
-                        <dataset>text</dataset>\
-                      </datasets>";
+        el.appendChild(div);  // Append to `el`, not to `document.body`
 
-          data += x.data;
-          data += dataKrona;
-          console.log(data);
-
-          var datel = document.createElement("Krona");
-          datel.setAttribute("collapse", "true");
-          datel.setAttribute("key", "true");
-          datel.innerHTML = data;
-
-          var div = document.createElement("div");
-          div.setAttribute("style", "display:none");
-          div.appendChild(datel);
-          el.appendChild(div);
-
-          load();
-        }
-
-        addData();
+        // Load the visualization
+        load();
       },
+
       resize: function(width, height) {
-        // Handle resize to adjust the widget size appropriately
+        // Apply size adjustments if the widget is resized
         el.style.width = width + 'px';
         el.style.height = height + 'px';
       }
