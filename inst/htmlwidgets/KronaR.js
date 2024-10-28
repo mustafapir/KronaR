@@ -1,6 +1,6 @@
 HTMLWidgets.widget({
 
-  name: 'KronaR2',
+  name: 'KronaR',
 
   type: 'output',
 

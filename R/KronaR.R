@@ -51,11 +51,11 @@ KronaR <- function(t, width = NULL, height = NULL, elementId = NULL) {
 
   # create widget
   htmlwidgets::createWidget(
-    name = 'KronaR2',
+    name = 'KronaR',
     x,
     width = width,
     height = height,
-    package = 'KronaR2',
+    package = 'KronaR',
     elementId = elementId
   )
 }
@@ -78,7 +78,7 @@ KronaR <- function(t, width = NULL, height = NULL, elementId = NULL) {
 #'
 #' @export
 KronaROutput <- function(outputId, width = '100%', height = '100%'){
-  htmlwidgets::shinyWidgetOutput(outputId, 'KronaR2', width = '100%', height = '100%', package = 'KronaR2')
+  htmlwidgets::shinyWidgetOutput(outputId, 'KronaR', width = '100%', height = '100%', package = 'KronaR')
 }
 
 #' @rdname KronaR-shiny
