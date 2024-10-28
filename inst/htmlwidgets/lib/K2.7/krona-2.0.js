@@ -1,3 +1,4 @@
+
 {//-----------------------------------------------------------------------------
 //
 // PURPOSE
@@ -308,9 +309,8 @@ function backingScale()
 
 function resize()
 {
-    var container = document.getElementById('myContainer');
-    imageWidth = container.clientWidth;
-    imageHeight = container.clientHeight;
+	imageWidth = window.innerWidth;
+	imageHeight = window.innerHeight;
 
 	if ( ! snapshotMode )
 	{
