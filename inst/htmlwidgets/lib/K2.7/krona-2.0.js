@@ -308,9 +308,8 @@ function backingScale()
 
 function resize()
 {
-    var container = document.getElementById('myContainer');
-    imageWidth = container.clientWidth;
-    imageHeight = container.clientHeight;
+	imageWidth = 600;  // Define desired width
+  imageHeight = 400; // Define desired height
 
 	if ( ! snapshotMode )
 	{
@@ -345,9 +344,9 @@ function resize()
 	maxMapRadius = minDimension * .03;
 	buffer = minDimension * bufferFactor;
 	margin = minDimension * .015;
-	centerX = (imageWidth - mapWidth - leftMargin) / 2 + leftMargin;
-	centerY = imageHeight / 2;
-	gRadius = minDimension / 2 - buffer;
+	centerX = imageWidth / 2;
+  centerY = imageHeight / 2;
+  gRadius = Math.min(imageWidth, imageHeight) / 2 - buffer;
 	//context.font = '11px sans-serif';
 }
 
