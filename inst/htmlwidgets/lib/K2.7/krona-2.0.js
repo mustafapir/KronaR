@@ -1,4 +1,3 @@
-
 {//-----------------------------------------------------------------------------
 //
 // PURPOSE
@@ -309,16 +308,17 @@ function backingScale()
 
 function resize()
 {
-	imageWidth = 600;  // Define desired width
-  imageHeight = 400; // Define desired height
+    var container = document.getElementById('myContainer');
+    imageWidth = container.clientWidth;
+    imageHeight = container.clientHeight;
 
 	if ( ! snapshotMode )
 	{
 		context.canvas.width = imageWidth * backingScale();
-    context.canvas.height = imageHeight * backingScale();
-    context.canvas.style.width = imageWidth + "px";
-    context.canvas.style.height = imageHeight + "px";
-    context.scale(backingScale(), backingScale());
+		context.canvas.height = imageHeight * backingScale();
+		context.canvas.style.width = imageWidth + "px"
+		context.canvas.style.height = imageHeight + "px"
+		context.scale(backingScale(), backingScale());
 	}
 
 	if ( datasetDropDown )
