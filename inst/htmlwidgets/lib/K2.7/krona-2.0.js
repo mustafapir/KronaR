@@ -313,8 +313,8 @@ function resize()
 
 	if ( ! snapshotMode )
 	{
-		context.canvas.width = imageWidth * backingScale();
-		context.canvas.height = imageHeight * backingScale();
+		context.canvas.width = imageWidth //* backingScale();
+		context.canvas.height = imageHeight //* backingScale();
 		context.canvas.style.width = imageWidth + "px"
 		context.canvas.style.height = imageHeight + "px"
 		context.scale(backingScale(), backingScale());
